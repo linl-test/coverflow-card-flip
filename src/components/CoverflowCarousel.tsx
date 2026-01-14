@@ -1,6 +1,18 @@
 import { useState, useCallback, useEffect, useMemo, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ChevronLeft, ChevronRight, Download, Settings, type LucideIcon } from "lucide-react";
+import {
+  ChevronLeft,
+  ChevronRight,
+  Download,
+  Settings,
+  Info,
+  Tag,
+  CheckCircle2,
+  Eye,
+  Clock,
+  BadgeCheck,
+  type LucideIcon,
+} from "lucide-react";
 
 export interface CarouselItem {
   id: number;
@@ -12,6 +24,7 @@ export interface CarouselItem {
 
 interface CoverflowCarouselProps {
   items: CarouselItem[];
+  isSearchMode?: boolean;
 }
 
 export type SkillCategory =
@@ -60,12 +73,40 @@ export const categoryStyles: Record<
 const BASE_CARD_WIDTH = 320;
 const FOCUSED_CARD_WIDTH = BASE_CARD_WIDTH * 2;
 
-const CoverflowCarousel = ({ items }: CoverflowCarouselProps) => {
+const cardBackgroundPalette = [
+  { from: "#e46f67", to: "#d96560" }, // coral
+  { from: "#6b72c6", to: "#6269b8" }, // indigo
+  { from: "#99b2ff", to: "#8ea7ff" }, // sky
+  { from: "#b676f5", to: "#f3a0c2" }, // purple → pink
+  { from: "#5ea7a9", to: "#569ea1" }, // teal
+  { from: "#333333", to: "#2b2b2b" }, // graphite
+] as const;
+
+const PREVIEW_BG_LIGHTEN = 45;
+const FOCUS_BG_LIGHTEN = 88;
+
+const CoverflowCarousel = ({ items, isSearchMode = false }: CoverflowCarouselProps) => {
   const [activeIndex, setActiveIndex] = useState(Math.floor(items.length / 2));
   const [focusedIndex, setFocusedIndex] = useState<number | null>(null);
   const [recentlyFocused, setRecentlyFocused] = useState(false);
   const lastActiveBeforeFocus = useRef(activeIndex);
   const focusEase = useMemo(() => [0.16, 1, 0.3, 1] as const, []);
+
+  const lightenColor = (color: string, amount: number) => {
+    const hex = color.replace("#", "").trim();
+    if (!/^[0-9a-fA-F]{6}$/.test(hex)) return color;
+
+    const mixAmount = Math.min(1, Math.max(0, amount / 100));
+    const r = Number.parseInt(hex.slice(0, 2), 16);
+    const g = Number.parseInt(hex.slice(2, 4), 16);
+    const b = Number.parseInt(hex.slice(4, 6), 16);
+
+    const mixedR = Math.round(r + (255 - r) * mixAmount);
+    const mixedG = Math.round(g + (255 - g) * mixAmount);
+    const mixedB = Math.round(b + (255 - b) * mixAmount);
+
+    return `rgb(${mixedR}, ${mixedG}, ${mixedB})`;
+  };
 
   useEffect(() => {
     if (!items.length) return;
@@ -211,13 +252,27 @@ const CoverflowCarousel = ({ items }: CoverflowCarouselProps) => {
       const isFocused = diff === 0;
 
       return {
-        opacity: isFocused ? 1 : 0.3,
+        opacity: 1,
         x: isFocused ? 0 : diff * 140,
         z: isFocused ? 500 : -400,
         rotateY: isFocused ? 0 : diff < 0 ? 30 : -30,
         scale: isFocused ? 1.15 : 0.8,
         zIndex: isFocused ? 50 : 5 - Math.abs(diff),
         pointerEvents: isFocused ? "auto" as const : "none" as const,
+      };
+    }
+
+    if (isSearchMode) {
+      const diff = index - activeIndex;
+      const absDiff = Math.abs(diff);
+      return {
+        opacity: 1,
+        x: diff * 140,
+        z: -60 * absDiff,
+        rotateY: 0,
+        scale: 0.92 - absDiff * 0.02,
+        zIndex: 10 - absDiff,
+        pointerEvents: "auto" as const,
       };
     }
 
@@ -241,7 +296,7 @@ const CoverflowCarousel = ({ items }: CoverflowCarouselProps) => {
     const isLeft = diff < 0;
 
     return {
-      opacity: isCenter ? 1 : 0.7 - absDiff * 0.15,
+      opacity: 1,
       x: diff * 220,
       z: isCenter ? 0 : -180 * absDiff,
       rotateY: isCenter ? 0 : isLeft ? 45 : -45,
@@ -277,11 +332,11 @@ const CoverflowCarousel = ({ items }: CoverflowCarouselProps) => {
         <motion.div
           className="absolute top-1/2 left-1/2 w-[600px] h-[400px] -translate-x-1/2 -translate-y-1/2 rounded-full blur-[120px] opacity-20"
           style={{
-            background: `radial-gradient(ellipse, hsl(var(--primary)), transparent 70%)`,
+            background: "radial-gradient(ellipse, rgba(0,0,0,0.035), transparent 70%)",
           }}
           animate={{
-            scale: [1, 1.1, 1],
-            opacity: [0.15, 0.25, 0.15],
+            scale: [1, 1.04, 1],
+            opacity: [0.08, 0.12, 0.08],
           }}
           transition={{
             duration: 4,
@@ -292,11 +347,20 @@ const CoverflowCarousel = ({ items }: CoverflowCarouselProps) => {
       </div>
 
       {/* Carousel container */}
-      <div className="coverflow-container relative w-full h-[450px] flex items-center justify-center">
+      <div
+        className="coverflow-container relative w-full h-[450px] flex items-center justify-center"
+        style={{
+          zIndex: isFocusMode ? 9999 : undefined,
+          filter: isSearchMode ? "saturate(0.9)" : undefined,
+          transform: isSearchMode ? "translateY(0px)" : undefined,
+          height: isSearchMode ? "520px" : undefined,
+          paddingTop: isSearchMode ? "120px" : undefined,
+        }}
+      >
         <AnimatePresence>
           {isFocusMode && (
             <motion.div
-              className="absolute inset-0 bg-black/65 backdrop-blur-md"
+              className="absolute inset-0 bg-white/60 backdrop-blur-md"
               style={{ zIndex: 5, pointerEvents: "auto" }}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -315,11 +379,23 @@ const CoverflowCarousel = ({ items }: CoverflowCarouselProps) => {
 
         <AnimatePresence mode="popLayout">
           {items.map((item, index) => {
-            const style = getItemStyle(index);
+          const style = getItemStyle(index);
             const isActive = index === activeIndex;
             const isFocused = index === focusedIndex;
             const colors = categoryStyles[item.category];
-            const cardWidth = isFocused ? FOCUSED_CARD_WIDTH : BASE_CARD_WIDTH;
+            const bg = cardBackgroundPalette[(item.id - 1) % cardBackgroundPalette.length];
+            const previewFrom = lightenColor(bg.from, PREVIEW_BG_LIGHTEN);
+          const previewTo = lightenColor(bg.to, PREVIEW_BG_LIGHTEN);
+          const focusFrom = lightenColor(bg.from, FOCUS_BG_LIGHTEN);
+          const focusTo = lightenColor(bg.to, FOCUS_BG_LIGHTEN);
+          const cardWidth = isFocused ? FOCUSED_CARD_WIDTH : BASE_CARD_WIDTH;
+          const cardHeight = isFocused
+            ? isSearchMode
+              ? 360
+              : 400
+            : 400;
+          const accentColor = lightenColor(bg.from, 40);
+          const accentSoft = lightenColor(bg.from, 65);
 
             return (
               <motion.div
@@ -352,7 +428,7 @@ const CoverflowCarousel = ({ items }: CoverflowCarouselProps) => {
                 }
               >
                 <div
-                  className={`coverflow-card h-[400px] ${
+                  className={`coverflow-card ${
                     isActive ? "coverflow-card-active" : ""
                   }`}
                   data-coverflow-card
@@ -360,17 +436,34 @@ const CoverflowCarousel = ({ items }: CoverflowCarouselProps) => {
                     position: "relative",
                     zIndex: 10,
                     width: cardWidth,
+                    height: cardHeight,
+                    marginTop: isSearchMode && isFocused ? 5 : 0,
+                    marginBottom: isSearchMode && isFocused ? 5 : 0,
                     overflowY: isFocused ? "auto" : "hidden",
                     overflowX: "hidden",
                     pointerEvents: "auto",
                   }}
                 >
-                  <div
-                    className="relative w-full min-h-full"
-                    style={{
-                      background: `linear-gradient(145deg, ${colors.from}, ${colors.to})`,
-                      pointerEvents: "auto",
+                  <motion.div
+                    className="coverflow-card-surface"
+                    data-card-num={String(item.id).padStart(2, "0")}
+                    animate={{
+                      ["--coverflow-card-from" as any]: isFocused 
+                        ? focusFrom
+                        : previewFrom,
+                      ["--coverflow-card-to" as any]: isFocused 
+                        ? focusTo
+                        : previewTo,
                     }}
+                    transition={{
+                      duration: 1.35,
+                      ease: focusEase,
+                    }}
+                    style={{
+                      pointerEvents: "auto",
+                      ["--coverflow-card-from" as any]: previewFrom,
+                      ["--coverflow-card-to" as any]: previewTo,
+                    } as React.CSSProperties}
                   >
                     {/* Soft glow edge */}
                     <div
@@ -380,121 +473,165 @@ const CoverflowCarousel = ({ items }: CoverflowCarouselProps) => {
                       }}
                     />
 
-                    {/* Subtle grid */}
-                    <div className="absolute inset-0 opacity-[0.08] bg-[radial-gradient(circle_at_1px_1px,_#fff_1px,_transparent_0)] [background-size:24px_24px] pointer-events-none" />
+                    {/* Dashed divider */}
+                    <div className="absolute left-8 right-8 top-[38%] border-t border-dashed border-white/40 opacity-60 pointer-events-none" />
 
-                    {/* Top chrome */}
-                    <div className="absolute inset-x-0 top-0 h-24 bg-white/5 blur-3xl pointer-events-none" />
+                    {/* Corner squares */}
+                    <div
+                      className="absolute top-5 right-5 w-3 h-3 bg-white/20 rounded-sm opacity-80 pointer-events-none"
+                      style={{ boxShadow: "-18px 0 0 rgba(255,255,255,0.2)" }}
+                    />
 
                     {/* Content */}
                     {isFocused ? (
-                      <div
+                      <motion.div
                         className="relative flex flex-col gap-10 p-6 pb-12"
-                        style={{ zIndex: 20, pointerEvents: "auto" }}
+                        animate={{
+                          ["--text-color" as any]: "#0f172a",
+                        }}
+                        transition={{
+                          duration: 0.7,
+                          ease: focusEase,
+                        }}
+                        style={{ 
+                          zIndex: 20, 
+                          pointerEvents: "auto",
+                          ["--text-color" as any]: "#0f172a",
+                        } as React.CSSProperties}
                       >
-                        {/* Sticky header */}
-                        <div className="sticky top-0 -mx-6 px-6 pt-2 pb-3 z-20 bg-gradient-to-b from-black/70 via-black/40 to-transparent backdrop-blur-md">
-                          <div className="flex items-center gap-3">
-                            <div className="px-3 py-1 rounded-full text-[11px] uppercase tracking-[0.2em] font-semibold text-white/80 border border-white/20 bg-white/10">
+                        {/* Top bar */}
+                        <div className="flex items-start justify-between gap-4">
+                          <div className="space-y-2">
+                            <p className="text-xs uppercase tracking-[0.25em] text-slate-500">
                               {item.category}
-                            </div>
-                            <div className="text-xs text-white/60 flex items-center gap-2">
-                              <item.icon className="w-4 h-4" strokeWidth={1.5} />
-                              <span>{item.title}</span>
-                            </div>
-                          </div>
-                        </div>
-
-                        {/* Section 1 — Overview */}
-                        <section className="space-y-4">
-                          <div className="flex items-center gap-3">
-                            <div className="px-3 py-1 rounded-full text-[11px] uppercase tracking-[0.2em] font-semibold text-white/80 border border-white/15 bg-white/10">
-                              Skill Spotlight
-                            </div>
-                            <div className="px-3 py-1 rounded-full text-[11px] uppercase tracking-[0.2em] font-semibold text-white/70 border border-white/15 bg-white/5">
-                              {item.category}
-                            </div>
-                          </div>
-                          <div className="space-y-3">
-                            <h3 className="text-3xl font-semibold text-white leading-tight">
+                            </p>
+                            <h3 className="text-3xl font-semibold leading-tight text-slate-900">
                               {item.title}
                             </h3>
-                            <p className="text-base text-white/80 leading-relaxed max-w-[560px]">
+                            <p className="text-base leading-relaxed text-slate-600">
                               {item.hint}
                             </p>
-                          </div>
-                          <div className="flex items-center gap-3">
-                            <button className="px-4 py-2 rounded-full bg-white text-black text-sm font-semibold shadow-lg shadow-black/30 hover:scale-105 transition-transform">
-                              Inspect skill
-                            </button>
-                          </div>
-                        </section>
-
-                        {/* Section 2 — GitHub / Implementation */}
-                        <section className="space-y-4">
-                          <div className="text-xs uppercase tracking-[0.25em] text-white/60">
-                            GitHub Snapshot
-                          </div>
-                          <div className="grid gap-4 md:grid-cols-2">
-                            <div className="rounded-2xl bg-white/5 border border-white/10 p-4 shadow-inner shadow-black/30">
-                              <div className="flex items-start justify-between gap-3">
-                                <div className="space-y-1">
-                                  <div className="text-sm text-white/60">Repository</div>
-                                  <div className="text-lg font-semibold text-white">
-                                    slack-gif-creator
-                                  </div>
-                                  <div className="text-xs text-white/50">
-                                    Language: Python • Path: slack-gif-creator/
-                                  </div>
-                                </div>
-                                <a
-                                  href="https://github.com/anthropics/skills/tree/main/slack-gif-creator"
-                                  target="_blank"
-                                  rel="noreferrer"
-                                  onClick={(event) => event.stopPropagation()}
-                                  className="px-3 py-2 text-xs font-semibold rounded-full border border-white/20 text-white/80 hover:bg-white/10 transition-colors"
-                                >
-                                  View on GitHub
-                                </a>
-                              </div>
-                              <div className="mt-3 flex flex-wrap gap-3 text-xs text-white/60">
-                                <span>🐍 Python</span>
-                                <span>📦 pillow • imageio • numpy</span>
-                                <span>📄 License: LICENSE.txt</span>
+                            <div className="pt-2 border-t border-slate-200">
+                              <div className="flex items-center text-sm text-slate-500 gap-5">
+                                <span className="inline-flex items-center gap-2">
+                                  <Download className="w-4 h-4" style={{ color: accentSoft }} />
+                                  <span>0</span>
+                                </span>
+                                <span className="inline-flex items-center gap-2">
+                                  <Eye className="w-4 h-4" style={{ color: accentSoft }} />
+                                  <span>5</span>
+                                </span>
+                                <span className="inline-flex items-center gap-2">
+                                  <Clock className="w-4 h-4" style={{ color: accentSoft }} />
+                                  <span>Nov 24, 2025</span>
+                                </span>
+                                <span className="inline-flex items-center gap-2 ml-auto text-slate-900">
+                                  <BadgeCheck className="w-4 h-4" style={{ color: accentColor }} />
+                                  <span>by iAmAttila</span>
+                                </span>
                               </div>
                             </div>
-                            <div className="rounded-2xl border border-white/10 bg-black/20 p-4 space-y-2">
-                              <div className="text-sm font-semibold text-white">
-                                Implementation Notes
-                              </div>
-                              <ul className="text-sm text-white/70 space-y-1 list-disc list-inside">
-                                <li>Draw frames with PIL (Image + ImageDraw primitives)</li>
-                                <li>Assemble + optimize with GIFBuilder (palette, duplicates)</li>
-                                <li>Validate Slack readiness (dimensions, FPS, duration)</li>
-                              </ul>
-                            </div>
                           </div>
-                        </section>
-
-                        {/* Section 3 — File Explorer + Markdown */}
-                        <section className="space-y-4">
-                          <div className="text-xs uppercase tracking-[0.25em] text-white/60">
-                            Files & Resources
-                          </div>
-                          <div
-                            className="flex flex-wrap gap-3 relative z-40 pointer-events-auto"
-                            onClickCapture={(event) => {
-                              if (!import.meta.env.DEV) return;
-                              const target = event.target as HTMLElement | null;
-                              console.log("[Coverflow] Button row click capture", {
-                                tag: target?.tagName,
-                                classes: target?.className,
-                                targetPointer: target ? getComputedStyle(target).pointerEvents : null,
-                              });
+                          <button
+                            type="button"
+                            onClick={(event) => {
+                              event.stopPropagation();
+                              setFocusedIndex(null);
+                              setActiveIndex(lastActiveBeforeFocus.current);
                             }}
+                            className="shrink-0 p-2 text-slate-500 hover:text-slate-700 transition"
+                            aria-label="Close"
                           >
+                            <item.icon className="w-5 h-5" style={{ color: accentColor }} strokeWidth={1.6} />
+                          </button>
+                        </div>
+
+                        {/* About section */}
+                        <section className="space-y-3 bg-white/70 border border-white/60 rounded-xl p-4 shadow-sm">
+                          <div className="flex items-center gap-2 text-slate-800 font-semibold">
+                            <Info className="w-5 h-5" style={{ color: accentColor }} />
+                            <span>About this skill</span>
+                          </div>
+                          <div className="space-y-3 text-sm leading-relaxed text-slate-700">
+                            <p>
+                              Direct response skills help you craft messages that drive immediate action—whether that’s a click, a lead, or a sale. Each element is built to earn attention, build desire, and make the decision simple.
+                            </p>
+                            <p>
+                              Use these cards as a quick refresher on proven frameworks, headline patterns, and persuasive structure so you can move fast without sacrificing clarity or conversion.
+                            </p>
+                          </div>
+                        </section>
+
+                        {/* Categories */}
+                        <section className="space-y-3">
+                          <div className="flex items-center gap-2 text-slate-800 font-semibold">
+                            <Tag className="w-5 h-5" style={{ color: accentColor }} />
+                            <span>Categories</span>
+                          </div>
+                          <div className="flex flex-wrap gap-2">
+                            {["Writing & Content", "Copywriting & Marketing", "Sales Strategy"].map((label) => (
+                              <span
+                                key={label}
+                                className="px-3 py-1 rounded-full bg-white/70 border text-sm font-medium text-slate-700"
+                                style={{ borderColor: accentSoft }}
+                              >
+                                {label}
+                              </span>
+                            ))}
+                          </div>
+                        </section>
+
+                        {/* What you'll learn */}
+                        <section className="space-y-3">
+                          <div className="flex items-center gap-2 text-slate-800 font-semibold">
+                            <CheckCircle2 className="w-5 h-5" style={{ color: accentColor }} />
+                            <span>What you’ll learn</span>
+                          </div>
+                          <ul className="space-y-2 text-sm text-slate-700">
+                            {[
+                              "Crafting headlines with stronger click-through rates.",
+                              "Understanding psychology and decision-making biases.",
+                              "Structuring persuasive flows that keep readers engaged.",
+                            ].map((text, idx) => (
+                              <li key={idx} className="flex items-start gap-2">
+                                <span
+                                  className="mt-1 h-2 w-2 rounded-full"
+                                  style={{ backgroundColor: accentColor }}
+                                />
+                                <span>{text}</span>
+                              </li>
+                            ))}
+                          </ul>
+                        </section>
+
+                        {/* Footer actions */}
+                        <div className="flex flex-wrap items-center gap-3 pt-2 border-t border-slate-200">
+                          <button
+                            type="button"
+                            onClick={(event) => {
+                              event.stopPropagation();
+                              setFocusedIndex(null);
+                              setActiveIndex(lastActiveBeforeFocus.current);
+                            }}
+                            className="inline-flex items-center gap-2 px-3 py-2 text-sm font-medium text-slate-600 hover:text-slate-800 transition"
+                          >
+                            <ChevronLeft className="w-4 h-4" />
+                            Back to browsing
+                          </button>
+                          <div className="ml-auto flex items-center gap-2">
                             <button
-                              className="inline-flex items-center gap-2 px-3 py-2 text-xs font-semibold rounded-full border border-white/20 text-white/80 hover:bg-white/10 transition-colors"
+                              type="button"
+                              className="px-4 py-2 rounded-full text-white text-sm font-semibold shadow-sm transition"
+                              style={{
+                                backgroundColor: accentColor,
+                                boxShadow: `0 10px 30px ${accentColor}30`,
+                              }}
+                              onClick={(event) => event.stopPropagation()}
+                            >
+                              Set up Skill
+                            </button>
+                            <button
+                              className="inline-flex items-center gap-2 px-4 py-2 text-sm font-semibold rounded-full text-white shadow-sm transition"
                               data-coverflow-download
                               onClickCapture={(event) => {
                                 if (!import.meta.env.DEV) return;
@@ -505,122 +642,17 @@ const CoverflowCarousel = ({ items }: CoverflowCarouselProps) => {
                               }}
                               onClick={handleDownloadSkill}
                               type="button"
+                              style={{
+                                backgroundColor: accentColor,
+                                boxShadow: `0 10px 30px ${accentColor}30`,
+                              }}
                             >
                               <Download className="w-4 h-4" strokeWidth={1.5} />
-                              <span>Download skill</span>
-                            </button>
-                            <button
-                              className="inline-flex items-center gap-2 px-3 py-2 text-xs font-semibold rounded-full bg-white text-black shadow-lg shadow-black/30 hover:scale-105 transition-transform"
-                              data-coverflow-setup
-                              onClickCapture={(event) => {
-                                if (!import.meta.env.DEV) return;
-                                console.log("[Coverflow] Set up button capture", {
-                                  target: (event.target as HTMLElement)?.tagName,
-                                  pointerEvents: getComputedStyle(event.currentTarget).pointerEvents,
-                                });
-                              }}
-                              onClick={(event) => {
-                                event.stopPropagation();
-                                if (import.meta.env.DEV) {
-                                  console.log("[Coverflow] Set up skill click", {
-                                    focusedIndex,
-                                    activeIndex,
-                                    isFocusMode,
-                                  });
-                                }
-                                window.open(
-                                  "https://support.claude.com/en/articles/12512180-using-skills-in-claude#h_ed1d052296",
-                                  "_blank",
-                                  "noreferrer"
-                                );
-                              }}
-                              type="button"
-                            >
-                              <Settings className="w-4 h-4" strokeWidth={1.5} />
-                              <span>Set up skill</span>
+                              <span>Download Skill</span>
                             </button>
                           </div>
-                          <div className="grid gap-4 md:grid-cols-[260px,1fr]">
-                            <div className="rounded-2xl border border-white/10 bg-white/5 p-4 space-y-2">
-                              <div className="text-sm font-semibold text-white">File Explorer</div>
-                              <div className="space-y-2 text-sm text-white/70">
-                                <div className="flex items-center gap-2">
-                                  <span className="text-white/60">📁</span>
-                                  <span>slack-gif-creator/</span>
-                                </div>
-                                <div className="ml-4 space-y-1">
-                                  <div className="flex items-center gap-2">
-                                    <span className="text-white/60">📄</span>
-                                    <span>SKILL.md</span>
-                                  </div>
-                                  <div className="flex items-center gap-2">
-                                    <span className="text-white/60">📄</span>
-                                    <span>requirements.txt</span>
-                                  </div>
-                                  <div className="flex items-center gap-2">
-                                    <span className="text-white/60">📄</span>
-                                    <span>LICENSE.txt</span>
-                                  </div>
-                                </div>
-                                <div className="flex items-center gap-2">
-                                  <span className="text-white/60">📁</span>
-                                  <span>core/</span>
-                                </div>
-                                <div className="ml-4 space-y-1">
-                                  <div className="flex items-center gap-2">
-                                    <span className="text-white/60">📄</span>
-                                    <span>gif_builder.py</span>
-                                  </div>
-                                  <div className="flex items-center gap-2">
-                                    <span className="text-white/60">📄</span>
-                                    <span>validators.py</span>
-                                  </div>
-                                  <div className="flex items-center gap-2">
-                                    <span className="text-white/60">📄</span>
-                                    <span>easing.py</span>
-                                  </div>
-                                  <div className="flex items-center gap-2">
-                                    <span className="text-white/60">📄</span>
-                                    <span>frame_composer.py</span>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                            <div className="rounded-2xl border border-white/10 bg-black/30 p-4 space-y-3">
-                              <div className="flex items-center justify-between gap-3">
-                                <div>
-                                  <div className="text-xs uppercase tracking-[0.2em] text-white/50">
-                                    Markdown Preview
-                                  </div>
-                                  <div className="text-sm font-semibold text-white">
-                                    slack-gif-creator/SKILL.md
-                                  </div>
-                                </div>
-                                <button className="px-3 py-2 text-xs rounded-full border border-white/20 text-white/80 hover:bg-white/10 transition-colors">
-                                  Copy
-                                </button>
-                              </div>
-                              <div className="space-y-2 text-sm text-white/75 leading-relaxed">
-                                <p>
-                                  Knowledge and utilities for creating animated GIFs optimized for Slack. Provides constraints, validation tools, and animation concepts. Use when users request animated GIFs for Slack like "make me a GIF of X doing Y for Slack."
-                                </p>
-                                <p>
-                                  Quick constraints: emoji GIFs are best at 128×128; message GIFs up to ~480×480; target 10–30 FPS;
-                                  keep colors ~48–128; and keep emoji GIFs under ~3 seconds.
-                                </p>
-                                <pre className="bg-black/60 border border-white/10 rounded-xl p-3 text-xs font-mono text-white/80 overflow-x-auto">
-{`from core.gif_builder import GIFBuilder
-from PIL import Image, ImageDraw
-
-builder = GIFBuilder(width=128, height=128, fps=10)
-# ... generate frames and add them ...
-builder.save("output.gif", num_colors=48, optimize_for_emoji=True)`}
-                                </pre>
-                              </div>
-                            </div>
-                          </div>
-                        </section>
-                      </div>
+                        </div>
+                      </motion.div>
                     ) : (
                       <div className="relative h-full flex flex-col justify-between p-6">
                         <div className="flex items-center justify-between gap-3">
@@ -679,7 +711,7 @@ builder.save("output.gif", num_colors=48, optimize_for_emoji=True)`}
                         }}
                       />
                     )}
-                  </div>
+                  </motion.div>
                 </div>
 
                 {/* Reflection */}
@@ -688,7 +720,9 @@ builder.save("output.gif", num_colors=48, optimize_for_emoji=True)`}
                     className="coverflow-reflection rounded-2xl"
                     style={{
                       width: cardWidth,
-                      background: `linear-gradient(145deg, ${colors.from}, ${colors.to})`,
+                      background: `linear-gradient(180deg, ${
+                        isFocused ? focusFrom : previewFrom
+                      }, ${isFocused ? focusTo : previewTo})`,
                       boxShadow: `0 0 50px ${colors.glow}`,
                     }}
                   />

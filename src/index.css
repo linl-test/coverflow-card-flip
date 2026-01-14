@@ -81,9 +81,13 @@
   }
 
   body {
-    @apply bg-background text-foreground antialiased;
-    background: var(--surface-gradient);
+    @apply text-foreground antialiased;
     min-height: 100vh;
+    background-color: #fdfbf7;
+    background-image:
+      linear-gradient(rgba(0, 0, 0, 0.025) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0, 0, 0, 0.025) 1px, transparent 1px);
+    background-size: 90px 90px;
   }
 }
 
@@ -104,6 +108,36 @@
       0 25px 50px -12px rgba(0, 0, 0, 0.8),
       0 0 0 1px rgba(255, 255, 255, 0.05);
     transition: box-shadow 0.4s ease, width 0.4s ease;
+  }
+
+  .coverflow-card-surface {
+    @apply relative w-full min-h-full;
+    isolation: isolate;
+    background-image:
+      linear-gradient(
+        180deg,
+        rgba(255, 255, 255, 0.2) 0%,
+        rgba(0, 0, 0, 0.16) 100%
+      ),
+      linear-gradient(
+        180deg,
+        var(--coverflow-card-from, #6b72c6),
+        var(--coverflow-card-to, #6269b8)
+      );
+  }
+
+  .coverflow-card-surface::before {
+    content: attr(data-card-num);
+    position: absolute;
+    top: 16px;
+    left: 16px;
+    font-size: 96px;
+    line-height: 1;
+    font-weight: 800;
+    letter-spacing: -0.08em;
+    color: rgba(255, 255, 255, 0.22);
+    pointer-events: none;
+    user-select: none;
   }
 
   .coverflow-card-active {
