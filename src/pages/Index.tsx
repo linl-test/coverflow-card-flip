@@ -1,69 +1,214 @@
-import CoverflowCarousel from "@/components/CoverflowCarousel";
+import { useMemo, useState } from "react";
+import CoverflowCarousel, {
+  type CarouselItem,
+  type SkillCategory,
+  categoryStyles,
+} from "@/components/CoverflowCarousel";
+import {
+  Brain,
+  Workflow,
+  RefreshCcw,
+  Orbit,
+  ShieldCheck,
+  Sparkles,
+  PanelsTopLeft,
+  Map,
+  SlidersHorizontal,
+  Link2,
+  Terminal,
+  Clock,
+  Archive,
+  ClipboardCheck,
+  ShieldAlert,
+  Shield,
+  BadgeCheck,
+} from "lucide-react";
 
-const carouselItems = [
+const categories: { id: SkillCategory; label: string; description: string }[] = [
+  { id: "Reasoning", label: "Reasoning", description: "Skills that plan, decompose, and make sense of problems" },
+  { id: "Action", label: "Action", description: "Skills that let an agent interact with tools and environments" },
+  { id: "Memory", label: "Memory", description: "Skills that retain and retrieve state across sessions" },
+  { id: "Evaluation", label: "Evaluation", description: "Skills that check, critique, and self-correct" },
+  { id: "Safety", label: "Safety", description: "Skills that guard, veto, and constrain risky behavior" },
+];
+
+const carouselItems: CarouselItem[] = [
   {
     id: 1,
-    image: "https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=640&h=800&fit=crop",
-    title: "Neon Dreams",
-    subtitle: "Electronic · 2024",
+    title: "Planning",
+    hint: "Breaks goals into crisp steps",
+    category: "Reasoning",
+    icon: Brain,
   },
   {
     id: 2,
-    image: "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=640&h=800&fit=crop",
-    title: "Midnight Sessions",
-    subtitle: "Jazz · Live Album",
+    title: "Tool Use",
+    hint: "Chooses and chains the right tools",
+    category: "Action",
+    icon: Workflow,
   },
   {
     id: 3,
-    image: "https://images.unsplash.com/photo-1514320291840-2e0a9bf2a9ae?w=640&h=800&fit=crop",
-    title: "Aurora",
-    subtitle: "Ambient · Relaxation",
+    title: "Self-Correction",
+    hint: "Finds and fixes issues before they ship",
+    category: "Evaluation",
+    icon: RefreshCcw,
   },
   {
     id: 4,
-    image: "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=640&h=800&fit=crop",
-    title: "Echoes",
-    subtitle: "Progressive · 2024",
+    title: "Long-Context Memory",
+    hint: "Maintains state across long sessions",
+    category: "Memory",
+    icon: Orbit,
   },
   {
     id: 5,
-    image: "https://images.unsplash.com/photo-1459749411175-04bf5292ceea?w=640&h=800&fit=crop",
-    title: "City Lights",
-    subtitle: "Synthwave · EP",
+    title: "Safety Layer",
+    hint: "Guards and vetoes risky actions",
+    category: "Safety",
+    icon: ShieldCheck,
   },
   {
     id: 6,
-    image: "https://images.unsplash.com/photo-1571266028243-e4733b0f0bb0?w=640&h=800&fit=crop",
-    title: "Stellar",
-    subtitle: "Indie · Single",
+    title: "Insight Summaries",
+    hint: "Distills signals into tight briefs",
+    category: "Reasoning",
+    icon: Sparkles,
   },
   {
     id: 7,
-    image: "https://images.unsplash.com/photo-1504898770365-14faca6a7320?w=640&h=800&fit=crop",
-    title: "Wanderlust",
-    subtitle: "World Music · 2024",
+    title: "Orchestration",
+    hint: "Coordinates agents, tools, and timing",
+    category: "Action",
+    icon: PanelsTopLeft,
+  },
+  {
+    id: 8,
+    title: "Scenario Mapping",
+    hint: "Maps outcomes across branches",
+    category: "Reasoning",
+    icon: Map,
+  },
+  {
+    id: 9,
+    title: "Constraint Solver",
+    hint: "Keeps constraints intact across steps",
+    category: "Reasoning",
+    icon: SlidersHorizontal,
+  },
+  {
+    id: 10,
+    title: "API Chaining",
+    hint: "Routes outputs to the right tools",
+    category: "Action",
+    icon: Link2,
+  },
+  {
+    id: 11,
+    title: "Environment Control",
+    hint: "Executes commands with safeguards",
+    category: "Action",
+    icon: Terminal,
+  },
+  {
+    id: 12,
+    title: "Session Recall",
+    hint: "Recovers decisions and rationale",
+    category: "Memory",
+    icon: Clock,
+  },
+  {
+    id: 13,
+    title: "Workspace State",
+    hint: "Tracks files, tasks, and notes",
+    category: "Memory",
+    icon: Archive,
+  },
+  {
+    id: 14,
+    title: "Test Generation",
+    hint: "Creates checks before shipping",
+    category: "Evaluation",
+    icon: ClipboardCheck,
+  },
+  {
+    id: 15,
+    title: "Risk Scanning",
+    hint: "Flags regressions and anomalies",
+    category: "Evaluation",
+    icon: ShieldAlert,
+  },
+  {
+    id: 16,
+    title: "Policy Guard",
+    hint: "Enforces policies before execution",
+    category: "Safety",
+    icon: Shield,
+  },
+  {
+    id: 17,
+    title: "Approval Gate",
+    hint: "Requests consent on sensitive acts",
+    category: "Safety",
+    icon: BadgeCheck,
   },
 ];
 
 const Index = () => {
+  const [activeCategory, setActiveCategory] = useState<SkillCategory>("Reasoning");
+  const filteredItems = useMemo(
+    () => carouselItems.filter((item) => item.category === activeCategory),
+    [activeCategory]
+  );
+  const categoryDescription =
+    categories.find((category) => category.id === activeCategory)?.description ??
+    "Explore core agent capabilities.";
+
   return (
     <main className="min-h-screen flex flex-col items-center justify-center px-4 py-12 overflow-hidden">
       {/* Header */}
       <header className="text-center mb-12">
         <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-3 tracking-tight">
-          Featured Albums
+          Agent Skills Explorer
         </h1>
         <p className="text-muted-foreground text-lg">
-          Discover your next favorite sound
+          Preview capabilities at a glance before diving deeper
         </p>
       </header>
 
+      {/* Category selector */}
+      <div className="flex flex-col items-center gap-3 mb-8">
+        <div className="flex flex-wrap items-center justify-center gap-2 bg-white/5 border border-white/10 rounded-full px-2 py-2 backdrop-blur-sm">
+          {categories.map((category) => {
+            const isActive = category.id === activeCategory;
+            const colors = categoryStyles[category.id];
+            return (
+              <button
+                key={category.id}
+                onClick={() => setActiveCategory(category.id)}
+                className="px-4 py-2 rounded-full text-sm font-medium transition-all duration-200"
+                style={{
+                  color: isActive ? "white" : "rgba(255,255,255,0.7)",
+                  background: isActive ? "rgba(255,255,255,0.08)" : "transparent",
+                  boxShadow: isActive
+                    ? `0 0 0 1px ${colors.accent}, 0 0 25px ${colors.glow}`
+                    : "0 0 0 1px rgba(255,255,255,0.1)",
+                }}
+              >
+                {category.label}
+              </button>
+            );
+          })}
+        </div>
+        <p className="text-sm text-muted-foreground/80">{categoryDescription}</p>
+      </div>
+
       {/* Carousel */}
-      <CoverflowCarousel items={carouselItems} />
+      <CoverflowCarousel items={filteredItems} />
 
       {/* Keyboard hint */}
       <p className="mt-8 text-muted-foreground/50 text-xs tracking-widest uppercase">
-        Click cards to navigate
+        Click cards to inspect skills
       </p>
     </main>
   );
