@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useMemo, useState } from "react";
+import { Fragment, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import CoverflowCarousel, {
   type CarouselItem,
   type SkillCategory,
@@ -6,6 +6,7 @@ import CoverflowCarousel, {
 } from "@/components/CoverflowCarousel";
 import RotatingText from "@/components/RotatingText";
 import FloatingSearchBar from "@/components/FloatingSearchBar";
+import { parseSkillFile, type ParsedSkill } from "@/lib/skillsParser";
 import { AnimatePresence, motion } from "framer-motion";
 import {
   Brain,
@@ -27,15 +28,10 @@ import {
   BadgeCheck,
   Search,
   X,
+  BookOpen,
+  LifeBuoy,
+  Sparkle,
 } from "lucide-react";
-
-const categories: { id: SkillCategory; label: string; description: string }[] = [
-  { id: "Reasoning", label: "Reasoning", description: "Concepts and patterns for designing smooth, polished animations" },
-  { id: "Action", label: "Action", description: "Hands-on tools and workflows to build and export GIFs" },
-  { id: "Memory", label: "Memory", description: "Quick reference cards for Slack constraints and reusable recipes" },
-  { id: "Evaluation", label: "Evaluation", description: "Validation and optimization checks to keep GIFs Slack-ready" },
-  { id: "Safety", label: "Safety", description: "Hard guardrails: dimensions, FPS, duration, and color limits" },
-];
 
 const carouselItems: CarouselItem[] = [
   {
@@ -93,6 +89,7 @@ const carouselItems: CarouselItem[] = [
     hint: "Use interpolate() easing functions to avoid stiff, linear motion",
     category: "Reasoning",
     icon: Map,
+    media: "/easing-curves.png",
   },
   {
     id: 9,
@@ -190,46 +187,30 @@ const trendingItems: CarouselItem[] = [
   },
 ];
 
-const featuredItems: CarouselItem[] = [
-  {
-    id: 201,
-    title: "Slack GIF Creator",
-    hint: "Featured skill: Knowledge and utilities for creating animated GIFs optimized for Slack",
-    category: "Reasoning",
-    icon: Brain,
-  },
-  {
-    id: 202,
-    title: "Validators",
-    hint: "Editor's pick: Check if a GIF meets Slack requirements before you upload it",
-    category: "Evaluation",
-    icon: RefreshCcw,
-  },
-  {
-    id: 203,
-    title: "Make Graphics Pop",
-    hint: "Featured technique: Thicker lines, depth, contrast, and gradients make GIFs feel polished",
-    category: "Reasoning",
-    icon: SlidersHorizontal,
-  },
-  {
-    id: 204,
-    title: "Optimize File Size",
-    hint: "Essential skill: Reduce FPS, colors, duration, or dimensions to hit Slack-friendly sizes",
-    category: "Evaluation",
-    icon: ClipboardCheck,
-  },
-];
+type CollectionType = "Trending" | "Cowork";
+const defaultRole = "Software Engineer";
 
 const Index = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [isSearchFocused, setIsSearchFocused] = useState(false);
   const [submittedQuery, setSubmittedQuery] = useState("");
   const [showSearchOverlay, setShowSearchOverlay] = useState(false);
-  const [activeCategory, setActiveCategory] = useState<SkillCategory>("Reasoning");
-  const [activeCollection, setActiveCollection] = useState<"Trending" | "Featured">("Trending");
+  const [activeCollection, setActiveCollection] = useState<CollectionType>("Trending");
+  const [hideSearchBar, setHideSearchBar] = useState(false);
+  const [activeRole, setActiveRole] = useState<string>(defaultRole);
+  const footerRef = useRef<HTMLDivElement | null>(null);
+  const [parsedSkills, setParsedSkills] = useState<ParsedSkill[]>([]);
+  const [skillsError, setSkillsError] = useState<string | null>(null);
   const searchActive = showSearchOverlay;
   const searchBarActive = isSearchFocused || showSearchOverlay;
+  const mapCategory = useCallback((value?: string): SkillCategory => {
+    const normalized = (value || "").toLowerCase();
+    if (normalized.includes("action")) return "Action";
+    if (normalized.includes("memory") || normalized.includes("reference")) return "Memory";
+    if (normalized.includes("eval")) return "Evaluation";
+    if (normalized.includes("safety") || normalized.includes("security")) return "Safety";
+    return "Reasoning";
+  }, []);
 
   useEffect(() => {
     const onKey = (event: KeyboardEvent) => {
@@ -266,22 +247,86 @@ const Index = () => {
     );
   };
   
+  const coworkerCards: CarouselItem[] = useMemo(() => {
+    return parsedSkills.map((skill, idx) => ({
+      id: 1000 + idx,
+      title: skill.title,
+      hint: skill.about || skill.description || "No description provided.",
+      category: mapCategory(skill.category),
+      icon: BookOpen,
+      tags: Array.from(new Set([...(skill.tags || []), "coworker"])),
+      about: skill.about,
+      author: skill.author,
+      instructor: skill.author,
+      role: skill.role || defaultRole,
+    }));
+  }, [mapCategory, parsedSkills]);
+
+  const baseCarouselItems = useMemo(
+    () =>
+      [...carouselItems, ...coworkerCards].map((item) => ({
+        ...item,
+        role: item.role || defaultRole,
+      })),
+    [coworkerCards]
+  );
+
+  const coworkTabItems = useMemo(
+    () =>
+      baseCarouselItems.filter((item) =>
+        (item.tags || []).some((tag) => tag.toLowerCase().includes("cowork"))
+      ),
+    [baseCarouselItems]
+  );
+
+  const hasCoworkTab = coworkTabItems.length > 0;
+
+  const collectionTabs = useMemo(
+    () => {
+      const tabs: { key: CollectionType; label: string }[] = [
+        { key: "Trending", label: "Trending Skills" },
+      ];
+      if (hasCoworkTab) {
+        tabs.push({ key: "Cowork", label: "Cowork Skills" });
+      }
+      return tabs;
+    },
+    [hasCoworkTab]
+  );
+
+  const roleTabs = useMemo(() => {
+    const unique = new Set<string>();
+    baseCarouselItems.forEach((item) => unique.add(item.role || defaultRole));
+    return Array.from(unique);
+  }, [baseCarouselItems]);
+
+  const collectionDescription = useMemo(() => {
+    if (activeCollection === "Trending") return "Most popular skills this week";
+    if (activeCollection === "Cowork" && hasCoworkTab) {
+      return "Cowork-tagged skills from your library";
+    }
+    return "Most popular skills this week";
+  }, [activeCollection, hasCoworkTab]);
+
   const collectionItems = useMemo(
-    () => activeCollection === "Trending" ? trendingItems : featuredItems,
-    [activeCollection]
+    () => {
+      if (activeCollection === "Cowork") return coworkTabItems;
+      return trendingItems;
+    },
+    [activeCollection, coworkTabItems]
   );
   
   const filteredItems = useMemo(
-    () => carouselItems.filter((item) => item.category === activeCategory),
-    [activeCategory]
+    () => baseCarouselItems,
+    [baseCarouselItems]
   );
   const searchableItems = useMemo(() => {
     const map = new globalThis.Map<number, CarouselItem>();
-    [...carouselItems, ...trendingItems, ...featuredItems].forEach((item) => {
+    [...baseCarouselItems, ...trendingItems].forEach((item) => {
       map.set(item.id, item);
     });
     return Array.from(map.values());
-  }, []);
+  }, [baseCarouselItems]);
 
   const searchResults = useMemo(() => {
     const term = searchQuery.trim().toLowerCase();
@@ -292,10 +337,14 @@ const Index = () => {
       return haystack.includes(term);
     });
   }, [searchQuery, searchableItems]);
-  const categoryDescription =
-    categories.find((category) => category.id === activeCategory)?.description ??
-    "Explore core agent capabilities.";
 
+  const roleFilteredItems = useMemo(
+    () =>
+      filteredItems.filter(
+        (item) => (item.role || defaultRole) === activeRole
+      ),
+    [activeRole, filteredItems]
+  );
   const handleSearchSubmit = (value: string) => {
     setSearchQuery(value);
     setSubmittedQuery(value);
@@ -325,69 +374,121 @@ const Index = () => {
     return () => window.removeEventListener("keydown", onKeyDown);
   }, [showSearchOverlay]);
 
+  useEffect(() => {
+    const footerEl = footerRef.current;
+    if (!footerEl || typeof IntersectionObserver === "undefined") return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const entry = entries[0];
+        setHideSearchBar(entry.isIntersecting);
+      },
+      { threshold: 0.1 }
+    );
+
+    observer.observe(footerEl);
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    const loadSkills = async () => {
+      try {
+        const imports = import.meta.glob("/public/skills/*.md", { as: "raw" });
+        const entries = Object.entries(imports);
+        const loaded: ParsedSkill[] = [];
+
+        for (const [path, loader] of entries) {
+          const raw = await (loader as () => Promise<string>)();
+          loaded.push(parseSkillFile(raw, path));
+        }
+
+        setParsedSkills(loaded);
+        setSkillsError(null);
+      } catch (error) {
+        if (import.meta.env.DEV) {
+          console.error("Failed to load skills", error);
+        }
+        setSkillsError("Unable to load skills from /public/skills/*.md. Please ensure the files exist.");
+      }
+    };
+
+    loadSkills();
+  }, []);
+
+  useEffect(() => {
+    if (!hasCoworkTab && activeCollection === "Cowork") {
+      setActiveCollection("Trending");
+    }
+  }, [activeCollection, hasCoworkTab]);
+
+  useEffect(() => {
+    if (roleTabs.length && !roleTabs.includes(activeRole)) {
+      setActiveRole(roleTabs[0]);
+    }
+  }, [activeRole, roleTabs]);
+
   return (
     <main className="min-h-screen flex flex-col items-center justify-center px-4 py-12 overflow-hidden">
       {/* Header */}
       <header className="text-center mb-12">
-        <h1 className="text-4xl md:text-5xl font-bold mb-3 tracking-tight text-black flex flex-wrap items-center justify-center gap-2">
+        <h1 className="text-5xl md:text-6xl font-bold mb-4 tracking-tight text-black flex flex-wrap items-center justify-center gap-2 text-center leading-tight">
           <span>Level Up Your</span>
-          <RotatingText
-            texts={['AI', 'Productivity', 'Writing', 'Business', 'Debugging', 'Design', 'Marketing']}
-            mainClassName="px-3 text-white overflow-hidden py-2 rounded-lg inline-flex"
-            style={{ backgroundColor: '#DF784E' }}
-            staggerFrom="last"
-            initial={{ y: "100%" }}
-            animate={{ y: 0 }}
-            exit={{ y: "-120%" }}
-            staggerDuration={0.025}
-            splitLevelClassName="overflow-hidden"
-            transition={{ type: "spring", damping: 30, stiffness: 400 }}
-            rotationInterval={2000}
-          />
-          <span>Workflow with Claude Skills</span>
+          <span className="inline-flex -rotate-1 drop-shadow-sm">
+            <RotatingText
+              texts={['AI', 'Productivity', 'Writing', 'Business', 'Debugging', 'Design', 'Marketing']}
+              mainClassName="px-3 text-white overflow-hidden py-2 rounded-lg inline-flex"
+              style={{ backgroundColor: '#DF784E' }}
+              staggerFrom="last"
+              initial={{ y: "100%" }}
+              animate={{ y: 0 }}
+              exit={{ y: "-120%" }}
+              staggerDuration={0.025}
+              splitLevelClassName="overflow-hidden"
+              transition={{ type: "spring", damping: 30, stiffness: 400 }}
+              rotationInterval={2000}
+            />
+          </span>
+          <span className="w-full text-center">Workflow with claude skills</span>
         </h1>
-        <p className="text-muted-foreground text-lg">
-          Preview capabilities at a glance before diving deeper
+        <p className="text-muted-foreground text-xl md:text-2xl">
+          Discover powerful skills and understand what they do—fast.
         </p>
       </header>
 
-      {/* First Carousel - Trending/Featured */}
+      {/* First Carousel - Trending/Cowork */}
       <div className={`w-full mb-16 transition-all duration-300 ${searchActive ? "scale-[0.99] opacity-95" : ""}`}>
         <div className="flex flex-col items-center gap-3 mb-8">
           <div className="flex items-center gap-2 bg-white/5 border border-black/10 rounded-full px-2 py-2 backdrop-blur-sm">
-            <button
-              onClick={() => setActiveCollection("Trending")}
-              className="px-4 py-2 rounded-full text-sm font-medium transition-all duration-200"
-              style={{
-                color: activeCollection === "Trending" ? "#000000" : "rgba(0,0,0,0.6)",
-                background: activeCollection === "Trending" ? "rgba(0,0,0,0.08)" : "transparent",
-                boxShadow: activeCollection === "Trending"
-                  ? "0 0 0 1px #DF784E, 0 0 25px rgba(223, 120, 78, 0.3)"
-                  : "0 0 0 1px rgba(0,0,0,0.1)",
-              }}
-            >
-              Trending Skills
-            </button>
-            <button
-              onClick={() => setActiveCollection("Featured")}
-              className="px-4 py-2 rounded-full text-sm font-medium transition-all duration-200"
-              style={{
-                color: activeCollection === "Featured" ? "#000000" : "rgba(0,0,0,0.6)",
-                background: activeCollection === "Featured" ? "rgba(0,0,0,0.08)" : "transparent",
-                boxShadow: activeCollection === "Featured"
-                  ? "0 0 0 1px #DF784E, 0 0 25px rgba(223, 120, 78, 0.3)"
-                  : "0 0 0 1px rgba(0,0,0,0.1)",
-              }}
-            >
-              Featured Skills
-            </button>
+            {collectionTabs.map((tab) => {
+              const isActive = activeCollection === tab.key;
+              return (
+                <button
+                  key={tab.key}
+                  onClick={() => setActiveCollection(tab.key)}
+                  className="px-4 py-2 rounded-full text-sm font-medium transition-all duration-200"
+                  style={{
+                    color: isActive ? "#000000" : "rgba(0,0,0,0.6)",
+                    background: isActive ? "rgba(0,0,0,0.08)" : "transparent",
+                    boxShadow: isActive
+                      ? "0 0 0 1px #DF784E, 0 0 25px rgba(223, 120, 78, 0.3)"
+                      : "0 0 0 1px rgba(0,0,0,0.1)",
+                  }}
+                >
+                  {tab.label}
+                </button>
+              );
+            })}
           </div>
           <p className="text-sm text-muted-foreground/80">
-            {activeCollection === "Trending" ? "Most popular skills this week" : "Editor's picks and essential skills"}
+            {collectionDescription}
           </p>
         </div>
 
-        <CoverflowCarousel items={collectionItems} isSearchMode={searchActive} />
+        <CoverflowCarousel
+          items={collectionItems}
+          isSearchMode={searchActive}
+          variant="content"
+        />
 
         {searchActive && !showSearchOverlay && (
           <div className="mt-8 w-full max-w-5xl mx-auto space-y-3">
@@ -454,38 +555,41 @@ const Index = () => {
         )}
       </div>
 
-      {/* Second Carousel - By Category */}
+      {/* Second Deck - By Role */}
       <div className="w-full">
-        <h2 className="text-2xl font-bold text-black text-center mb-6">Browse by Category</h2>
-        
+        <h2 className="text-2xl font-bold text-black text-center mb-6">Browse by Role</h2>
         <div className="flex flex-col items-center gap-3 mb-8">
-        <div className="flex flex-wrap items-center justify-center gap-2 bg-white/5 border border-white/10 rounded-full px-2 py-2 backdrop-blur-sm">
-          {categories.map((category) => {
-            const isActive = category.id === activeCategory;
-            const colors = categoryStyles[category.id];
-            return (
-              <button
-                key={category.id}
-                onClick={() => setActiveCategory(category.id)}
-                className="px-4 py-2 rounded-full text-sm font-medium transition-all duration-200"
-                style={{
-                  color: isActive ? "#000000" : "rgba(0,0,0,0.6)",
-                  background: isActive ? "rgba(0,0,0,0.08)" : "transparent",
-                  boxShadow: isActive
-                    ? `0 0 0 1px ${colors.accent}, 0 0 25px ${colors.glow}`
-                    : "0 0 0 1px rgba(0,0,0,0.1)",
-                }}
-              >
-                {category.label}
-              </button>
-            );
-          })}
+          <div className="flex flex-wrap items-center justify-center gap-2 bg-white/5 border border-white/10 rounded-full px-2 py-2 backdrop-blur-sm">
+            {roleTabs.map((role) => {
+              const isActive = role === activeRole;
+              return (
+                <button
+                  key={role}
+                  onClick={() => setActiveRole(role)}
+                  className="px-4 py-2 rounded-full text-sm font-medium transition-all duration-200"
+                  style={{
+                    color: isActive ? "#000000" : "rgba(0,0,0,0.6)",
+                    background: isActive ? "rgba(0,0,0,0.08)" : "transparent",
+                    boxShadow: isActive
+                      ? "0 0 0 1px #DF784E, 0 0 25px rgba(223, 120, 78, 0.3)"
+                      : "0 0 0 1px rgba(0,0,0,0.1)",
+                  }}
+                >
+                  {role}
+                </button>
+              );
+            })}
+          </div>
+          <p className="text-sm text-muted-foreground/80">
+            Role-specific skills grouped for quick scanning.
+          </p>
         </div>
-        <p className="text-sm text-muted-foreground/80">{categoryDescription}</p>
-      </div>
 
-      {/* Carousel */}
-      <CoverflowCarousel items={filteredItems} isSearchMode={searchActive} />
+        <CoverflowCarousel
+          items={roleFilteredItems}
+          isSearchMode={searchActive}
+          variant="content"
+        />
       </div>
 
       {/* Keyboard hint */}
@@ -493,19 +597,21 @@ const Index = () => {
         Click cards to inspect skills
       </p>
 
-      <FloatingSearchBar
-        query={searchQuery}
-        onQueryChange={(value) => {
-          handleQueryChange(value);
-        }}
-        onFocus={() => setIsSearchFocused(true)}
-        onBlur={() => {
-          if (!searchQuery.trim()) setIsSearchFocused(false);
-        }}
-        onSubmit={handleSearchSubmit}
-        isActive={searchBarActive}
-        placeholder="Search skills by title, category, or hint…"
-      />
+      {!hideSearchBar && (
+        <FloatingSearchBar
+          query={searchQuery}
+          onQueryChange={(value) => {
+            handleQueryChange(value);
+          }}
+          onFocus={() => setIsSearchFocused(true)}
+          onBlur={() => {
+            if (!searchQuery.trim()) setIsSearchFocused(false);
+          }}
+          onSubmit={handleSearchSubmit}
+          isActive={searchBarActive}
+          placeholder="Search skills by title, category, or hint…"
+        />
+      )}
 
       <AnimatePresence>
         {showSearchOverlay && (
@@ -558,7 +664,7 @@ const Index = () => {
 
               <div className="border-t border-black/5 bg-slate-50/80 px-2 pb-10 pt-14 flex-1 overflow-hidden flex items-start justify-center">
                 {searchResults.length > 0 ? (
-                  <CoverflowCarousel items={searchResults} isSearchMode />
+                  <CoverflowCarousel items={searchResults} isSearchMode variant="content" />
                 ) : (
                   <div className="w-full max-w-3xl mx-auto py-12 text-center text-black/60">
                     <p className="text-lg font-semibold mb-2">No skills found</p>
@@ -570,6 +676,116 @@ const Index = () => {
           </motion.div>
         )}
       </AnimatePresence>
+
+      {skillsError && (
+        <div className="w-full max-w-4xl mx-auto mt-12 px-4">
+          <div className="rounded-xl border border-amber-200 bg-amber-50 p-4 text-amber-800 text-sm">
+            {skillsError}
+          </div>
+        </div>
+      )}
+
+      {/* Editorial footer */}
+      <footer
+        ref={footerRef}
+        className="w-full mt-16 border-t border-black/5"
+        style={{ backgroundColor: "#FBFBF9" }}
+      >
+        <div className="max-w-6xl mx-auto px-6 py-16 grid grid-cols-1 lg:grid-cols-3 gap-8">
+          {/* Brand / Value */}
+            <div className="space-y-3">
+            <div className="inline-flex items-center gap-3">
+              <div className="h-11 w-11 rounded-2xl bg-slate-900 text-white flex items-center justify-center shadow-sm">
+                <Sparkle className="w-5 h-5" />
+              </div>
+              <div>
+                <p className="text-sm font-semibold text-slate-900 leading-tight">Claude Skills</p>
+                <p className="text-xs text-slate-500">Content-first guidance</p>
+              </div>
+            </div>
+            <p className="text-sm leading-relaxed text-slate-600 max-w-md">
+              Discover, understand, and deploy the right skill faster. This space keeps you oriented with calm, helpful guidance.
+            </p>
+            <div className="flex flex-col sm:flex-row items-center gap-2">
+              <input
+                type="email"
+                placeholder="you@example.com"
+                className="w-full sm:w-auto flex-1 px-3 py-2 rounded-lg border border-slate-200 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-slate-300"
+              />
+              <button className="px-4 py-2 rounded-xl bg-slate-900 text-white text-sm font-semibold shadow-sm hover:-translate-y-0.5 transition">
+                Subscribe
+              </button>
+            </div>
+          </div>
+
+          {/* Resources */}
+          <div className="rounded-xl border border-black/5 bg-white p-6 shadow-[0_8px_20px_rgba(0,0,0,0.08)] transition hover:-translate-y-0.5 hover:shadow-[0_12px_26px_rgba(0,0,0,0.1)] hover:border-black/10">
+            <div className="flex items-center gap-3 mb-3">
+              <div className="h-10 w-10 rounded-lg bg-[#E2E8F0] text-black flex items-center justify-center">
+                <BookOpen className="w-5 h-5" strokeWidth={1.6} />
+              </div>
+              <div>
+                <p className="text-base font-semibold text-slate-900">Resources</p>
+                <p className="text-xs text-slate-500 leading-relaxed">Learn and build with confidence</p>
+              </div>
+            </div>
+            <ul className="space-y-2 text-sm text-slate-700 leading-relaxed">
+              <li>• Official Skills Documentation</li>
+              <li>• Skill Marketplace</li>
+              <li>• How to Create a Skill</li>
+            </ul>
+            <button className="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-amber-700 hover:underline">
+              View all resources →
+            </button>
+          </div>
+
+          {/* FAQ */}
+          <div className="rounded-xl border border-black/5 bg-white p-6 shadow-[0_8px_20px_rgba(0,0,0,0.08)] transition hover:-translate-y-0.5 hover:shadow-[0_12px_26px_rgba(0,0,0,0.1)] hover:border-black/10">
+            <div className="flex items-center gap-3 mb-3">
+              <div className="h-10 w-10 rounded-lg bg-[#E2E8F0] text-black flex items-center justify-center">
+                <LifeBuoy className="w-5 h-5" strokeWidth={1.6} />
+              </div>
+              <div>
+                <p className="text-base font-semibold text-slate-900">Frequently Asked Questions</p>
+                <p className="text-xs text-slate-500 leading-relaxed">Answers without the noise</p>
+              </div>
+            </div>
+            <ul className="space-y-2 text-sm text-slate-700 leading-relaxed">
+              <li>• What are skills?</li>
+              <li>• Where I can use Skills?</li>
+              <li>• Should I create my own Skills?</li>
+            </ul>
+            {/* <button className="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-blue-700 hover:underline">
+              Visit Help Center →
+            </button> */}
+          </div>
+        </div>
+      </footer>
+      <div className="w-full border-t border-black/5" style={{ backgroundColor: "#FBFBF9" }}>
+        <div className="max-w-6xl mx-auto px-6 py-8 flex flex-col md:flex-row md:items-center md:justify-between gap-4 text-slate-600">
+          <span className="text-sm">© 2026 Automata. All rights reserved.</span>
+          <div className="flex items-center gap-3">
+            {[{ icon: "twitter" }, { icon: "github" }, { icon: "linkedin" }].map(({ icon }, idx) => (
+              <span
+                key={idx}
+                className="h-10 w-10 rounded-full bg-white border border-slate-200 shadow-sm flex items-center justify-center text-slate-500"
+              >
+                {icon === "twitter" && "𝕏"}
+                {icon === "github" && ""}
+                {icon === "linkedin" && "in"}
+              </span>
+            ))}
+          </div>
+          <div className="flex items-center gap-5 text-sm">
+            <a className="hover:underline" href="#">
+              Privacy Policy
+            </a>
+            <a className="hover:underline" href="#">
+              Terms of Service
+            </a>
+          </div>
+        </div>
+      </div>
     </main>
   );
 };

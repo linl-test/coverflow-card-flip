@@ -1,16 +1,20 @@
-import { useState, useCallback, useEffect, useMemo, useRef } from "react";
+import { useState, useCallback, useEffect, useMemo, useRef, type CSSProperties, type MouseEvent } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   ChevronLeft,
   ChevronRight,
   Download,
-  Settings,
   Info,
   Tag,
   CheckCircle2,
   Eye,
   Clock,
   BadgeCheck,
+  Star,
+  Gauge,
+  BookmarkPlus,
+  Heart,
+  Github,
   type LucideIcon,
 } from "lucide-react";
 
@@ -20,11 +24,23 @@ export interface CarouselItem {
   hint: string;
   category: SkillCategory;
   icon: LucideIcon;
+  media?: string;
+  level?: string;
+  duration?: string;
+  rating?: number;
+  certificate?: string;
+  instructor?: string;
+  githubUrl?: string;
+  tags?: string[];
+  about?: string;
+  author?: string;
+  role?: string;
 }
 
 interface CoverflowCarouselProps {
   items: CarouselItem[];
   isSearchMode?: boolean;
+  variant?: CardVariant;
 }
 
 export type SkillCategory =
@@ -33,6 +49,8 @@ export type SkillCategory =
   | "Memory"
   | "Evaluation"
   | "Safety";
+
+export type CardVariant = "explore" | "content";
 
 export const categoryStyles: Record<
   SkillCategory,
@@ -70,8 +88,42 @@ export const categoryStyles: Record<
   },
 };
 
+const categoryMedia: Record<SkillCategory, { src: string; alt: string }> = {
+  Reasoning: {
+    src: "https://images.unsplash.com/photo-1521737604893-ff0c1df1fd1c?auto=format&fit=crop&w=1200&q=80",
+    alt: "Team collaborating with sticky notes",
+  },
+  Action: {
+    src: "https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=1200&q=80",
+    alt: "Hands on a laptop and notebook",
+  },
+  Memory: {
+    src: "https://images.unsplash.com/photo-1522199710521-72d69614c702?auto=format&fit=crop&w=1200&q=80",
+    alt: "Organized notes on a desk",
+  },
+  Evaluation: {
+    src: "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&w=1200&q=80",
+    alt: "Design checklist and paper cards",
+  },
+  Safety: {
+    src: "https://images.unsplash.com/photo-1505685296765-3a2736de412f?auto=format&fit=crop&w=1200&q=80",
+    alt: "Secure lock on a dark background",
+  },
+};
+
+const defaultMeta = {
+  level: "Intermediate",
+  duration: "12 min",
+  rating: 4.8,
+  certificate: "Skill badge",
+  instructor: "Claude Coach",
+};
+
 const BASE_CARD_WIDTH = 320;
 const FOCUSED_CARD_WIDTH = BASE_CARD_WIDTH * 2;
+const CONTENT_BASE_CARD_WIDTH = 360;
+const CONTENT_FOCUSED_CARD_WIDTH = 680;
+const LIKE_STORAGE_KEY = "coverflow-liked-skills";
 
 const cardBackgroundPalette = [
   { from: "#e46f67", to: "#d96560" }, // coral
@@ -85,10 +137,15 @@ const cardBackgroundPalette = [
 const PREVIEW_BG_LIGHTEN = 45;
 const FOCUS_BG_LIGHTEN = 88;
 
-const CoverflowCarousel = ({ items, isSearchMode = false }: CoverflowCarouselProps) => {
+const CoverflowCarousel = ({
+  items,
+  isSearchMode = false,
+  variant = "explore",
+}: CoverflowCarouselProps) => {
   const [activeIndex, setActiveIndex] = useState(Math.floor(items.length / 2));
   const [focusedIndex, setFocusedIndex] = useState<number | null>(null);
   const [recentlyFocused, setRecentlyFocused] = useState(false);
+  const [likedIds, setLikedIds] = useState<Record<number, boolean>>({});
   const lastActiveBeforeFocus = useRef(activeIndex);
   const focusEase = useMemo(() => [0.16, 1, 0.3, 1] as const, []);
 
@@ -117,15 +174,35 @@ const CoverflowCarousel = ({ items, isSearchMode = false }: CoverflowCarouselPro
   }, [items]);
 
   useEffect(() => {
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") {
-        setFocusedIndex(null);
-        setActiveIndex(lastActiveBeforeFocus.current);
+    if (typeof window === "undefined") return;
+    try {
+      const stored = localStorage.getItem(LIKE_STORAGE_KEY);
+      if (stored) {
+        const parsed = JSON.parse(stored) as Record<number, boolean>;
+        setLikedIds(parsed);
       }
-    };
+    } catch {
+      // ignore invalid storage
+    }
+  }, []);
 
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
+  const toggleLike = useCallback((id: number) => {
+    setLikedIds((prev) => {
+      const next = { ...prev };
+      if (next[id]) {
+        delete next[id];
+      } else {
+        next[id] = true;
+      }
+      if (typeof window !== "undefined") {
+        try {
+          localStorage.setItem(LIKE_STORAGE_KEY, JSON.stringify(next));
+        } catch {
+          // ignore write errors
+        }
+      }
+      return next;
+    });
   }, []);
 
   useEffect(() => {
@@ -142,16 +219,48 @@ const CoverflowCarousel = ({ items, isSearchMode = false }: CoverflowCarouselPro
 
   const handlePrev = useCallback(() => {
     if (focusedIndex !== null) return;
-    setActiveIndex((prev) => (prev === 0 ? items.length - 1 : prev - 1));
-  }, [focusedIndex, items.length]);
+    setActiveIndex((prev) => {
+      if (variant === "content") {
+        return prev === 0 ? prev : prev - 1;
+      }
+      return prev === 0 ? items.length - 1 : prev - 1;
+    });
+  }, [focusedIndex, items.length, variant]);
 
   const handleNext = useCallback(() => {
     if (focusedIndex !== null) return;
-    setActiveIndex((prev) => (prev === items.length - 1 ? 0 : prev + 1));
-  }, [focusedIndex, items.length]);
+    setActiveIndex((prev) => {
+      if (variant === "content") {
+        return prev === items.length - 1 ? prev : prev + 1;
+      }
+      return prev === items.length - 1 ? 0 : prev + 1;
+    });
+  }, [focusedIndex, items.length, variant]);
 
   const isFocusMode = focusedIndex !== null;
   const focusIndex = focusedIndex ?? activeIndex;
+
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setFocusedIndex(null);
+        setActiveIndex(lastActiveBeforeFocus.current);
+      }
+      if (variant === "content" && focusedIndex === null) {
+        if (event.key === "ArrowLeft") {
+          event.preventDefault();
+          handlePrev();
+        }
+        if (event.key === "ArrowRight") {
+          event.preventDefault();
+          handleNext();
+        }
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [focusedIndex, handleNext, handlePrev, variant]);
 
   useEffect(() => {
     if (!import.meta.env.DEV) return;
@@ -215,7 +324,7 @@ const CoverflowCarousel = ({ items, isSearchMode = false }: CoverflowCarouselPro
     });
   }, [activeIndex, focusIndex, isFocusMode]);
 
-  const handleDownloadSkill = useCallback(async (event: React.MouseEvent) => {
+  const handleDownloadSkill = useCallback(async (event: MouseEvent) => {
     event.stopPropagation();
     console.log("[Coverflow] Download button clicked", {
       focusedIndex,
@@ -315,15 +424,20 @@ const CoverflowCarousel = ({ items, isSearchMode = false }: CoverflowCarouselPro
 
   const baseTransition = isFocusMode || recentlyFocused
     ? {
-        duration: 0.7,
+        duration: 0.6,
         ease: focusEase,
-        opacity: { duration: 0.4, ease: "easeOut" },
+        opacity: { duration: 0.35, ease: "easeOut" },
       }
-    : {
-        type: "spring",
-        stiffness: 300,
-        damping: 30,
-      };
+    : variant === "content"
+      ? {
+          duration: 0.32,
+          ease: "easeInOut",
+        }
+      : {
+          type: "spring",
+          stiffness: 300,
+          damping: 30,
+        };
 
   return (
     <div className="relative w-full h-[600px] flex flex-col items-center justify-center">
@@ -353,8 +467,18 @@ const CoverflowCarousel = ({ items, isSearchMode = false }: CoverflowCarouselPro
           zIndex: isFocusMode ? 9999 : undefined,
           filter: isSearchMode ? "saturate(0.9)" : undefined,
           transform: isSearchMode ? "translateY(0px)" : undefined,
-          height: isSearchMode ? "520px" : undefined,
-          paddingTop: isSearchMode ? "120px" : undefined,
+          height: isSearchMode
+            ? variant === "content"
+              ? "540px"
+              : "520px"
+            : variant === "content"
+              ? "520px"
+              : undefined,
+          paddingTop: isSearchMode
+            ? variant === "content"
+              ? "80px"
+              : "120px"
+            : undefined,
         }}
       >
         <AnimatePresence>
@@ -385,17 +509,86 @@ const CoverflowCarousel = ({ items, isSearchMode = false }: CoverflowCarouselPro
             const colors = categoryStyles[item.category];
             const bg = cardBackgroundPalette[(item.id - 1) % cardBackgroundPalette.length];
             const previewFrom = lightenColor(bg.from, PREVIEW_BG_LIGHTEN);
-          const previewTo = lightenColor(bg.to, PREVIEW_BG_LIGHTEN);
-          const focusFrom = lightenColor(bg.from, FOCUS_BG_LIGHTEN);
-          const focusTo = lightenColor(bg.to, FOCUS_BG_LIGHTEN);
-          const cardWidth = isFocused ? FOCUSED_CARD_WIDTH : BASE_CARD_WIDTH;
-          const cardHeight = isFocused
-            ? isSearchMode
-              ? 360
-              : 400
-            : 400;
-          const accentColor = lightenColor(bg.from, 40);
-          const accentSoft = lightenColor(bg.from, 65);
+            const previewTo = lightenColor(bg.to, PREVIEW_BG_LIGHTEN);
+            const focusFrom = lightenColor(bg.from, FOCUS_BG_LIGHTEN);
+            const focusTo = lightenColor(bg.to, FOCUS_BG_LIGHTEN);
+            const baseCardWidth = variant === "content" ? CONTENT_BASE_CARD_WIDTH : BASE_CARD_WIDTH;
+            const focusedCardWidth = variant === "content" ? CONTENT_FOCUSED_CARD_WIDTH : FOCUSED_CARD_WIDTH;
+            const cardWidth = isFocused ? focusedCardWidth : baseCardWidth;
+            const cardHeight = variant === "content"
+              ? isFocused
+                ? isSearchMode
+                  ? 364 // 30% reduction from 520
+                  : 378 // 30% reduction from 540
+                : 460
+              : isFocused
+                ? isSearchMode
+                  ? 252 // 30% reduction from 360
+                  : 280 // 30% reduction from 400
+                : 400;
+            const accentColor = lightenColor(bg.from, 40);
+            const accentSoft = lightenColor(bg.from, 65);
+            const media = item.media ?? categoryMedia[item.category].src;
+            const mediaAlt = item.media ? `${item.title} preview` : categoryMedia[item.category].alt;
+            const isCoworkItem = (item.tags || []).some((tag) => tag.toLowerCase().includes("cowork"));
+            const displayTags =
+              (item.tags || [])
+                .filter((tag) => tag.toLowerCase() !== "coworker")
+                .slice(0, 3);
+            const meta = {
+              level: item.level ?? defaultMeta.level,
+              duration: item.duration ?? defaultMeta.duration,
+              rating: item.rating ?? defaultMeta.rating,
+              certificate: item.certificate ?? defaultMeta.certificate,
+              instructor: item.instructor ?? item.author ?? defaultMeta.instructor,
+            };
+            const githubUrl = item.githubUrl ?? "https://github.com/anthropics/skills";
+            const metaRow = (
+              <div className="flex flex-wrap items-center gap-2 text-xs text-slate-600">
+                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-100 border border-slate-200">
+                  <Clock className="w-4 h-4 text-slate-500" />
+                  {meta.duration}
+                </span>
+                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-100 border border-slate-200">
+                  <Eye className="w-4 h-4 text-slate-500" />
+                  10
+                </span>
+                <a
+                  href={githubUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  onClick={(event) => event.stopPropagation()}
+                  className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-100 border border-slate-200 text-slate-700 hover:bg-white hover:border-slate-300 transition"
+                  aria-label="View on GitHub"
+                >
+                  <Github className="w-4 h-4 text-slate-700" />
+                  GitHub
+                </a>
+              </div>
+            );
+            const cardClassName = variant === "content"
+              ? "content-card"
+              : `coverflow-card ${isActive ? "coverflow-card-active" : ""}`;
+            const cardShellStyle: CSSProperties = {
+              position: "relative",
+              zIndex: 10,
+              width: cardWidth,
+              height: cardHeight,
+              marginTop: isSearchMode && isFocused ? 5 : 0,
+              marginBottom: isSearchMode && isFocused ? 5 : 0,
+              overflowY: isFocused ? "auto" : "hidden",
+              overflowX: "hidden",
+              pointerEvents: "auto",
+            };
+
+            if (variant === "content") {
+              cardShellStyle.boxShadow = isFocused
+                ? "0 20px 50px rgba(0,0,0,0.16)"
+                : "0 12px 30px rgba(0,0,0,0.12)";
+              cardShellStyle.background = "#ffffff";
+              cardShellStyle.border = "1px solid rgba(15,23,42,0.06)";
+              cardShellStyle.borderRadius = "22px";
+            }
 
             return (
               <motion.div
@@ -422,28 +615,251 @@ const CoverflowCarousel = ({ items, isSearchMode = false }: CoverflowCarouselPro
                     : () => handleCardClick(index)
                 }
                 whileHover={
-                  !isActive || isFocusMode
-                    ? { scale: style.scale * 1.05, z: style.z + 40 }
-                    : {}
+                  isFocusMode
+                    ? {}
+                    : variant === "content"
+                      ? { scale: style.scale * 1.02, z: style.z + 30, y: -6 }
+                      : { scale: style.scale * 1.05, z: style.z + 40 }
                 }
               >
                 <div
-                  className={`coverflow-card ${
-                    isActive ? "coverflow-card-active" : ""
-                  }`}
+                  className={cardClassName}
                   data-coverflow-card
-                  style={{
-                    position: "relative",
-                    zIndex: 10,
-                    width: cardWidth,
-                    height: cardHeight,
-                    marginTop: isSearchMode && isFocused ? 5 : 0,
-                    marginBottom: isSearchMode && isFocused ? 5 : 0,
-                    overflowY: isFocused ? "auto" : "hidden",
-                    overflowX: "hidden",
-                    pointerEvents: "auto",
-                  }}
+                  style={cardShellStyle}
                 >
+                  {variant === "content" ? (
+                    <div
+                      className="flex h-full flex-col bg-white"
+                      style={{ backdropFilter: "none" }}
+                      aria-label={`Result ${activeIndex + 1} of ${items.length}, ${item.title}`}
+                    >
+                      <div
+                        className="relative w-full overflow-hidden"
+                        style={{ height: isFocused ? 240 : 190 }}
+                      >
+                        <img
+                          src={media}
+                          alt={mediaAlt}
+                          className="h-full w-full object-cover"
+                          loading="lazy"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-b from-black/35 via-black/10 to-transparent" />
+                        <div className="absolute top-4 left-4 flex items-center gap-2">
+                          <span className="px-3 py-1 text-[11px] uppercase tracking-[0.22em] font-semibold text-white bg-black/50 rounded-full shadow-sm">
+                            {item.category}
+                          </span>
+                          <span className="h-2 w-2 rounded-full" style={{ backgroundColor: colors.accent }} />
+                        </div>
+                        <button
+                          type="button"
+                          onClick={(event) => {
+                            event.stopPropagation();
+                            toggleLike(item.id);
+                          }}
+                          className="absolute top-4 right-4 inline-flex items-center gap-1 rounded-full bg-white/90 px-3 py-1.5 text-xs font-semibold text-slate-800 shadow-sm hover:bg-white transition"
+                          aria-label={likedIds[item.id] ? "Unlike" : "Like"}
+                        >
+                          <Heart
+                            className={`w-4 h-4 ${likedIds[item.id] ? "fill-red-500 text-red-500" : ""}`}
+                          />
+                          {likedIds[item.id] ? "Liked" : "Like"}
+                        </button>
+                      </div>
+
+                      <div className="flex-1 flex flex-col gap-4 px-6 py-5">
+                        <div className="flex items-start justify-between gap-3">
+                          <div className="space-y-2 w-full">
+                            {isCoworkItem && !isFocused ? (
+                              <div className="flex-1 flex flex-col gap-3">
+                                <h3 className="text-xl font-semibold text-slate-900 leading-tight">
+                                  {item.title}
+                                </h3>
+                                <div className="space-y-1">
+                                  <p className="text-sm text-slate-600 leading-relaxed line-clamp-4">
+                                    {item.about || item.hint}
+                                  </p>
+                                </div>
+                                {displayTags.length > 0 && (
+                                  <div className="flex flex-wrap gap-2">
+                                    {displayTags.map((tag) => (
+                                      <span
+                                        key={tag}
+                                        className="px-2.5 py-1 rounded-full bg-slate-100 border border-slate-200 text-[11px] font-semibold text-slate-700"
+                                      >
+                                        {tag}
+                                      </span>
+                                    ))}
+                                  </div>
+                                )}
+                              </div>
+                            ) : (
+                              <>
+                                <h3 className="text-xl font-semibold text-slate-900 leading-tight">
+                                  {item.title}
+                                </h3>
+                                <p className={`text-sm text-slate-600 ${isFocused ? "" : "line-clamp-3"}`}>
+                                  {item.hint}
+                                </p>
+                                {displayTags.length > 0 && (
+                                  <div className="flex flex-wrap gap-2 pt-1">
+                                    {displayTags.map((tag) => (
+                                      <span
+                                        key={tag}
+                                        className="px-2 py-1 rounded-full bg-slate-100 border border-slate-200 text-[11px] font-semibold text-slate-700"
+                                      >
+                                        {tag}
+                                      </span>
+                                    ))}
+                                  </div>
+                                )}
+                              </>
+                            )}
+                          </div>
+                          {isFocused && (
+                            <button
+                              type="button"
+                              onClick={(event) => {
+                                event.stopPropagation();
+                                toggleLike(item.id);
+                              }}
+                              className="shrink-0 inline-flex items-center gap-1 rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-700 border border-slate-200 hover:bg-white transition"
+                              aria-label={likedIds[item.id] ? "Unlike" : "Like"}
+                            >
+                              <Heart
+                                className={`w-4 h-4 ${likedIds[item.id] ? "fill-red-500 text-red-500" : ""}`}
+                              />
+                              {likedIds[item.id] ? "Liked" : "Like"}
+                            </button>
+                          )}
+                        </div>
+
+                        {!isFocused && !isCoworkItem && (
+                          <>
+                            <div className="flex items-center gap-3 text-xs font-semibold text-slate-600">
+                              <span>{meta.duration}</span>
+                            </div>
+                            <div className="flex flex-wrap gap-2 mt-2">
+                              {["Motion basics", "Slack readiness"].map((label) => (
+                                <span
+                                  key={label}
+                                  className="px-3 py-1 rounded-full bg-slate-100 border border-slate-200 text-xs font-semibold text-slate-700"
+                                >
+                                  {label}
+                                </span>
+                              ))}
+                            </div>
+                          </>
+                        )}
+
+                        {isFocused && (
+                          <>
+                            {metaRow}
+                            <div className="space-y-4">
+                              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                                <div className="rounded-xl border border-slate-200 bg-slate-50/70 p-4 shadow-sm">
+                                  <div className="flex items-center gap-2 text-sm font-semibold text-slate-800">
+                                    <Info className="w-4 h-4" style={{ color: colors.accent }} />
+                                    <span>When to Use This Skill</span>
+                                  </div>
+                                  <ul className="mt-3 space-y-2 text-sm text-slate-700">
+                                    {[
+                                      "Concise overview of the skill with expected outcomes.",
+                                      "When to deploy it and where it shines in a workflow.",
+                                      "Inputs, guardrails, and quick-start prompts.",
+                                    ].map((text, idx) => (
+                                      <li key={idx} className="flex items-start gap-2">
+                                        <span
+                                          className="mt-1 h-1.5 w-1.5 rounded-full"
+                                          style={{ backgroundColor: colors.accent }}
+                                        />
+                                        <span>{text}</span>
+                                      </li>
+                                    ))}
+                                  </ul>
+                                </div>
+                                <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
+                                  <div className="flex items-center gap-2 text-sm font-semibold text-slate-800">
+                                    <CheckCircle2 className="w-4 h-4" style={{ color: colors.accent }} />
+                                    <span>Success signals</span>
+                                  </div>
+                                  <div className="mt-3 space-y-2 text-sm text-slate-700">
+                                    <p>Clear, scannable outputs that show the skill is ready to use.</p>
+                                    <div className="flex flex-wrap gap-2">
+                                      {["Structured outline", "Examples ready", "Validated constraints", "Downloadable assets"].map((label) => (
+                                        <span
+                                          key={label}
+                                          className="px-3 py-1 rounded-full bg-slate-100 border border-slate-200 text-xs font-semibold text-slate-700"
+                                        >
+                                          {label}
+                                        </span>
+                                      ))}
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+
+                              <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
+                                <div className="flex items-center gap-2 text-sm font-semibold text-slate-800">
+                                  <Tag className="w-4 h-4" style={{ color: colors.accent }} />
+                                  <span>Topics covered</span>
+                                </div>
+                                <div className="mt-3 flex flex-wrap gap-2">
+                                  {["Motion basics", "Slack readiness", "Quality checks", "Export settings"].map((label) => (
+                                    <span
+                                      key={label}
+                                      className="px-3 py-1 rounded-full bg-slate-100 border border-slate-200 text-xs font-semibold text-slate-700"
+                                    >
+                                      {label}
+                                    </span>
+                                  ))}
+                                </div>
+                              </div>
+                            </div>
+                          </>
+                        )}
+                      </div>
+
+                      <div className="flex items-center gap-3 px-6 py-4 border-t border-slate-200 bg-slate-50/60">
+                        <div className="flex items-center gap-3 text-sm text-slate-700">
+                          <div className="h-10 w-10 rounded-full bg-slate-200 text-slate-800 font-semibold flex items-center justify-center">
+                            {item.title.slice(0, 1)}
+                          </div>
+                          <div className="leading-tight">
+                            <p className="font-semibold text-slate-900">{meta.instructor}</p>
+                          </div>
+                        </div>
+                        <div className="ml-auto flex items-center gap-2">
+                          {!isFocused && (
+                            <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white border border-slate-200 text-xs font-semibold text-slate-700 shadow-sm">
+                              <Clock className="w-4 h-4 text-slate-500" />
+                              {meta.duration}
+                            </span>
+                          )}
+                          {isFocused && (
+                            <>
+                              <button
+                                type="button"
+                                className="inline-flex items-center gap-2 rounded-full bg-slate-900 text-white px-4 py-2 text-sm font-semibold shadow-[0_12px_24px_rgba(0,0,0,0.18)] transition hover:-translate-y-0.5 hover:shadow-[0_16px_28px_rgba(0,0,0,0.22)]"
+                              >
+                                <BadgeCheck className="w-4 h-4" />
+                                Set up skill
+                              </button>
+                              <button
+                                type="button"
+                                className="inline-flex items-center gap-2 rounded-full bg-white px-4 py-2 text-sm font-semibold text-slate-700 border border-slate-200 shadow-sm transition hover:-translate-y-0.5"
+                                data-coverflow-download
+                                onClick={handleDownloadSkill}
+                              >
+                                <Download className="w-4 h-4" />
+                                Download
+                              </button>
+                            </>
+                          )}
+                        </div>
+                      </div>
+
+                    </div>
+                  ) : (
                   <motion.div
                     className="coverflow-card-surface"
                     data-card-num={String(item.id).padStart(2, "0")}
@@ -463,7 +879,7 @@ const CoverflowCarousel = ({ items, isSearchMode = false }: CoverflowCarouselPro
                       pointerEvents: "auto",
                       ["--coverflow-card-from" as any]: previewFrom,
                       ["--coverflow-card-to" as any]: previewTo,
-                    } as React.CSSProperties}
+                    } as CSSProperties}
                   >
                     {/* Soft glow edge */}
                     <div
@@ -497,7 +913,7 @@ const CoverflowCarousel = ({ items, isSearchMode = false }: CoverflowCarouselPro
                           zIndex: 20, 
                           pointerEvents: "auto",
                           ["--text-color" as any]: "#0f172a",
-                        } as React.CSSProperties}
+                          } as CSSProperties}
                       >
                         {/* Top bar */}
                         <div className="flex items-start justify-between gap-4">
@@ -712,10 +1128,11 @@ const CoverflowCarousel = ({ items, isSearchMode = false }: CoverflowCarouselPro
                       />
                     )}
                   </motion.div>
+                  )}
                 </div>
 
                 {/* Reflection */}
-                {(isActive || isFocused) && (
+                {variant === "explore" && (isActive || isFocused) && (
                   <div
                     className="coverflow-reflection rounded-2xl"
                     style={{
@@ -731,54 +1148,99 @@ const CoverflowCarousel = ({ items, isSearchMode = false }: CoverflowCarouselPro
             );
           })}
         </AnimatePresence>
-      </div>
 
-      {/* Navigation */}
-      <div className="flex items-center gap-8 mt-8">
-        <button
-          onClick={handlePrev}
-          className="nav-button disabled:opacity-40 disabled:cursor-not-allowed disabled:scale-100"
-          aria-label="Previous item"
-          disabled={isFocusMode}
-        >
-          <ChevronLeft className="w-6 h-6" />
-        </button>
-
-        {/* Indicators */}
-        <div className="flex items-center gap-2">
-          {items.map((_, index) => (
+        {variant === "content" && (
+          <div
+            className={`pointer-events-none absolute inset-0 flex justify-between px-4 md:px-10 ${
+              isSearchMode ? "items-end pb-8" : "items-center"
+            }`}
+          >
             <button
-              key={index}
-              onClick={() => setActiveIndex(index)}
-              className={`indicator-dot ${
-                index === activeIndex ? "indicator-dot-active" : ""
-              }`}
-              aria-label={`Go to item ${index + 1}`}
-              disabled={isFocusMode}
+              type="button"
+              onClick={handlePrev}
+              disabled={isFocusMode || activeIndex === 0}
+              aria-label="Previous result"
+              className="pointer-events-auto inline-flex items-center justify-center rounded-full bg-white shadow-[0_10px_30px_rgba(0,0,0,0.12)] border border-slate-200 h-12 w-12 text-slate-700 transition hover:-translate-y-0.5 hover:shadow-[0_16px_36px_rgba(0,0,0,0.16)] disabled:opacity-40 disabled:translate-y-0 disabled:shadow-none"
+            >
+              <ChevronLeft className="w-5 h-5" />
+            </button>
+            <button
+              type="button"
+              onClick={handleNext}
+              disabled={isFocusMode || activeIndex === items.length - 1}
+              aria-label="Next result"
+              className="pointer-events-auto inline-flex items-center justify-center rounded-full bg-white shadow-[0_10px_30px_rgba(0,0,0,0.12)] border border-slate-200 h-12 w-12 text-slate-700 transition hover:-translate-y-0.5 hover:shadow-[0_16px_36px_rgba(0,0,0,0.16)] disabled:opacity-40 disabled:translate-y-0 disabled:shadow-none"
+            >
+              <ChevronRight className="w-5 h-5" />
+            </button>
+          </div>
+        )}
+    </div>
+
+      {variant === "content" && items.length > 0 && (
+        <div className="mt-6 w-full max-w-3xl mx-auto text-center">
+          <div className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">
+            Result {activeIndex + 1} of {items.length}
+          </div>
+          <div className="mt-2 h-1.5 rounded-full bg-slate-100 overflow-hidden">
+            <div
+              className="h-1.5 rounded-full bg-slate-900 transition-all duration-300"
+              style={{ width: `${((activeIndex + 1) / items.length) * 100}%` }}
             />
-          ))}
+          </div>
         </div>
+      )}
 
-        <button
-          onClick={handleNext}
-          className="nav-button disabled:opacity-40 disabled:cursor-not-allowed disabled:scale-100"
-          aria-label="Next item"
-          disabled={isFocusMode}
-        >
-          <ChevronRight className="w-6 h-6" />
-        </button>
-      </div>
+      {variant !== "content" && (
+        <>
+          {/* Navigation */}
+          <div className="flex items-center gap-8 mt-8">
+            <button
+              onClick={handlePrev}
+              className="nav-button disabled:opacity-40 disabled:cursor-not-allowed disabled:scale-100"
+              aria-label="Previous item"
+              disabled={isFocusMode}
+            >
+              <ChevronLeft className="w-6 h-6" />
+            </button>
 
-      {/* Item counter */}
-      <motion.div
-        className="mt-6 text-muted-foreground text-sm font-medium tracking-wider"
-        key={activeIndex}
-        initial={{ opacity: 0, y: 10 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.3 }}
-      >
-        {String(activeIndex + 1).padStart(2, "0")} / {String(items.length).padStart(2, "0")}
-      </motion.div>
+            {/* Indicators */}
+            <div className="flex items-center gap-2">
+              {items.map((_, index) => (
+                <button
+                  key={index}
+                  onClick={() => setActiveIndex(index)}
+                  className={`indicator-dot ${
+                    index === activeIndex ? "indicator-dot-active" : ""
+                  }`}
+                  aria-label={`Go to item ${index + 1}`}
+                  disabled={isFocusMode}
+                />
+              ))}
+            </div>
+
+            <button
+              onClick={handleNext}
+              className="nav-button disabled:opacity-40 disabled:cursor-not-allowed disabled:scale-100"
+              aria-label="Next item"
+              disabled={isFocusMode}
+            >
+              <ChevronRight className="w-6 h-6" />
+            </button>
+          </div>
+
+          {/* Item counter */}
+          <motion.div
+            className="mt-6 text-muted-foreground text-sm font-medium tracking-wider"
+            key={activeIndex}
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3 }}
+          >
+            {String(activeIndex + 1).padStart(2, "0")} / {String(items.length).padStart(2, "0")}
+          </motion.div>
+        </>
+      )}
     </div>
   );
 };
