@@ -259,27 +259,28 @@ const Index = () => {
       author: skill.author,
       instructor: skill.author,
       role: skill.role || defaultRole,
+      githubUrl: skill.githubUrl,
+      categoryTag: skill.categoryTag,
+      descriptionSection: skill.descriptionSection,
+      whenToUseSection: skill.whenToUseSection,
+      successSignalsSection: skill.successSignalsSection,
     }));
   }, [mapCategory, parsedSkills]);
 
   const baseCarouselItems = useMemo(
     () =>
-      [...carouselItems, ...coworkerCards].map((item) => ({
-        ...item,
-        role: item.role || defaultRole,
-      })),
+      coworkerCards.length > 0
+        ? coworkerCards.map((item) => ({
+            ...item,
+            role: item.role || defaultRole,
+          }))
+        : [],
     [coworkerCards]
   );
 
-  const coworkTabItems = useMemo(
-    () =>
-      baseCarouselItems.filter((item) =>
-        (item.tags || []).some((tag) => tag.toLowerCase().includes("cowork"))
-      ),
-    [baseCarouselItems]
-  );
+  const coworkTabItems = baseCarouselItems;
 
-  const hasCoworkTab = coworkTabItems.length > 0;
+  const hasCoworkTab = baseCarouselItems.length > 0;
 
   const collectionTabs = useMemo(
     () => {
@@ -393,7 +394,7 @@ const Index = () => {
   useEffect(() => {
     const loadSkills = async () => {
       try {
-        const imports = import.meta.glob("/public/skills/*.md", { as: "raw" });
+        const imports = import.meta.glob("/public/skills/*.md", { query: "?raw", import: "default" });
         const entries = Object.entries(imports);
         const loaded: ParsedSkill[] = [];
 
@@ -448,7 +449,7 @@ const Index = () => {
               rotationInterval={2000}
             />
           </span>
-          <span className="w-full text-center">Workflow with claude skills</span>
+          <span className="w-full text-center">Workflow with Claude skills</span>
         </h1>
         <p className="text-muted-foreground text-xl md:text-2xl">
           Discover powerful skills and understand what they do—fast.
@@ -489,6 +490,11 @@ const Index = () => {
           isSearchMode={searchActive}
           variant="content"
         />
+        {collectionItems.length === 0 && (
+          <p className="text-sm text-muted-foreground/70 text-center mt-4">
+            No cards available. Add markdown files in <code>public/skills</code>.
+          </p>
+        )}
 
         {searchActive && !showSearchOverlay && (
           <div className="mt-8 w-full max-w-5xl mx-auto space-y-3">
@@ -590,6 +596,11 @@ const Index = () => {
           isSearchMode={searchActive}
           variant="content"
         />
+        {roleFilteredItems.length === 0 && (
+          <p className="text-sm text-muted-foreground/70 text-center mt-4">
+            No cards available. Add markdown files in <code>public/skills</code>.
+          </p>
+        )}
       </div>
 
       {/* Keyboard hint */}

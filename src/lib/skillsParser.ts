@@ -8,6 +8,12 @@ export interface ParsedSkill {
   author?: string;
   about?: string;
   role?: string;
+  githubUrl?: string;
+  updated?: string;
+  categoryTag?: string;
+  descriptionSection?: string;
+  whenToUseSection?: string;
+  successSignalsSection?: string;
 }
 
 const cleanText = (value: string) => value.trim().replace(/^\*\s*/, "").trim();
@@ -210,6 +216,20 @@ const extractRoleFromContent = (content: string): string | undefined => {
   return undefined;
 };
 
+const extractSection = (content: string, headingPattern: RegExp): string | undefined => {
+  const lines = content.split(/\r?\n/);
+  const idx = lines.findIndex((line) => headingPattern.test(line.trim()));
+  if (idx === -1) return undefined;
+  const collected: string[] = [];
+  for (let i = idx + 1; i < lines.length; i++) {
+    const line = lines[i].trim();
+    if (!line) continue;
+    if (/^##\s+/.test(line) || /^#\s+/.test(line)) break;
+    collected.push(line);
+  }
+  return collected.join("\n").trim() || undefined;
+};
+
 export const parseSkillsMarkdown = (markdown: string): ParsedSkill[] => {
   if (!markdown.trim()) return [];
 
@@ -296,6 +316,16 @@ export const parseSkillFile = (markdown: string, source = "skill.md"): ParsedSki
   const authorLine =
     frontmatter.author ||
     lines.find((line) => /^-?\s*author:/i.test(line))?.replace(/^-?\s*author:\s*/i, "");
+  const updatedLine =
+    frontmatter.updated ||
+    lines.find((line) => /^-?\s*updated:/i.test(line))?.replace(/^-?\s*updated:\s*/i, "");
+  const githubLine =
+    frontmatter.github ||
+    lines.find((line) => /^-?\s*github:/i.test(line))?.replace(/^-?\s*github:\s*/i, "");
+  const roleTagLine =
+    lines.find((line) => /^-?\s*role tag:/i.test(line))?.replace(/^-?\s*role tag:\s*/i, "");
+  const categoryTagLine =
+    lines.find((line) => /^-?\s*category tag:/i.test(line))?.replace(/^-?\s*category tag:\s*/i, "");
 
   const aboutSection = (() => {
     const rawLines = content.split(/\r?\n/);
@@ -312,8 +342,13 @@ export const parseSkillFile = (markdown: string, source = "skill.md"): ParsedSki
     return collected.join(" ").trim() || undefined;
   })();
 
+  const whenToUse = extractSection(content, /^##\s+when to use this skill/i);
+  const descriptionSection = extractSection(content, /^##\s+description/i);
+  const successSignalsSection = extractSection(content, /^##\s+success signals/i);
+
   const description =
     frontmatter.description ||
+    whenToUse ||
     aboutSection ||
     cleanText(
       lines.find(
@@ -334,13 +369,24 @@ export const parseSkillFile = (markdown: string, source = "skill.md"): ParsedSki
       .filter(Boolean)
       .forEach((t) => tags.add(t));
   }
-  const role = extractRoleFromContent(markdown);
+  if (categoryTagLine) {
+    categoryTagLine
+      .split("→")
+      .flatMap((part) => part.split(","))
+      .map((t) => t.trim())
+      .filter(Boolean)
+      .forEach((t) => tags.add(t));
+  }
+  if (roleTagLine) {
+    tags.add(roleTagLine.trim());
+  }
+  const role = roleTagLine || extractRoleFromContent(markdown);
   const autoTag = autoTagFromContent(title, aboutSection || description || content);
   // Always add coworker tag
   tags.add("coworker");
   if (autoTag) tags.add(autoTag);
 
-  const category = frontmatter.category;
+  const category = frontmatter.category || categoryTagLine?.split("→")[0]?.trim();
 
   return {
     title,
@@ -350,7 +396,13 @@ export const parseSkillFile = (markdown: string, source = "skill.md"): ParsedSki
     body: content,
     source,
     author: authorLine,
-    about: aboutSection,
+    about: aboutSection || whenToUse || descriptionSection || description,
     role,
+    githubUrl: githubLine,
+    updated: updatedLine,
+    categoryTag: categoryTagLine,
+    descriptionSection,
+    whenToUseSection: whenToUse,
+    successSignalsSection,
   };
 };

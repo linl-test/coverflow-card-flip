@@ -17,6 +17,7 @@ import {
   Github,
   type LucideIcon,
 } from "lucide-react";
+import JSZip from "jszip";
 
 export interface CarouselItem {
   id: number;
@@ -35,6 +36,10 @@ export interface CarouselItem {
   about?: string;
   author?: string;
   role?: string;
+  categoryTag?: string;
+  descriptionSection?: string;
+  whenToUseSection?: string;
+  successSignalsSection?: string;
 }
 
 interface CoverflowCarouselProps {
@@ -117,6 +122,30 @@ const defaultMeta = {
   rating: 4.8,
   certificate: "Skill badge",
   instructor: "Claude Coach",
+};
+
+const renderMarkdownBlock = (text?: string) => {
+  if (!text) return null;
+  const lines = text.split(/\r?\n/).filter(Boolean);
+  const listItems = lines.filter((line) => /^[-*]\s+/.test(line.trim()));
+  if (listItems.length > 0) {
+    return (
+      <ul className="list-disc pl-5 space-y-2 text-sm text-slate-700">
+        {listItems.map((line, idx) => (
+          <li key={idx}>{line.replace(/^[-*]\s+/, "").trim()}</li>
+        ))}
+      </ul>
+    );
+  }
+  return (
+    <div className="space-y-2 text-sm text-slate-700">
+      {text.split(/\n{2,}/).map((para, idx) => (
+        <p key={idx} className="leading-relaxed">
+          {para.trim()}
+        </p>
+      ))}
+    </div>
+  );
 };
 
 const BASE_CARD_WIDTH = 320;
@@ -324,36 +353,105 @@ const CoverflowCarousel = ({
     });
   }, [activeIndex, focusIndex, isFocusMode]);
 
-  const handleDownloadSkill = useCallback(async (event: MouseEvent) => {
-    event.stopPropagation();
-    console.log("[Coverflow] Download button clicked", {
-      focusedIndex,
-      activeIndex,
-      isFocusMode,
-    });
+  const parseGithubInfo = (githubUrl?: string): { owner: string; repo: string; branch: string; subpath?: string } | null => {
+    if (!githubUrl) return null;
     try {
-      const downloadUrl = "https://codeload.github.com/anthropics/skills/zip/refs/heads/main";
-      console.log("[Coverflow] Fetching skill zip", { downloadUrl });
-      const response = await fetch(downloadUrl);
-      console.log("[Coverflow] Fetch response", {
-        ok: response.ok,
-        status: response.status,
-        statusText: response.statusText,
-      });
-      const blob = await response.blob();
-      const href = URL.createObjectURL(blob);
-      const link = document.createElement("a");
-      link.href = href;
-      link.download = "slack-gif-creator.zip";
-      document.body.appendChild(link);
-      link.click();
-      link.remove();
-      URL.revokeObjectURL(href);
-      console.log("[Coverflow] Download triggered successfully");
+      const url = new URL(githubUrl);
+      if (url.hostname !== "github.com") return null;
+      const parts = url.pathname.split("/").filter(Boolean);
+      if (parts.length < 2) return null;
+      const [owner, repo, third, branchOrPath, ...rest] = parts;
+      let branch = "main";
+      let subpath: string | undefined;
+      if (third === "tree" && branchOrPath) {
+        branch = branchOrPath;
+        subpath = rest.join("/");
+      }
+      return { owner, repo, branch, subpath };
     } catch (error) {
-      console.error("Failed to download skill zip", error);
+      console.error("Invalid GitHub URL", error);
+      return null;
     }
-  }, [activeIndex, focusedIndex, isFocusMode]);
+  };
+
+  const downloadSubfolderAsZip = async (info: { owner: string; repo: string; branch: string; subpath?: string }) => {
+    if (!info.subpath) return null;
+    const zip = new JSZip();
+    const basePrefix = info.subpath.replace(/\/$/, "");
+    const treeUrl = `https://api.github.com/repos/${info.owner}/${info.repo}/git/trees/${info.branch}?recursive=1`;
+    const treeRes = await fetch(treeUrl, {
+      headers: {
+        Accept: "application/vnd.github+json",
+        "User-Agent": "skills-cards",
+      },
+    });
+    if (!treeRes.ok) {
+      throw new Error(`Failed to list repository tree: ${treeRes.status} ${treeRes.statusText}`);
+    }
+    const treeJson: { tree?: Array<{ path: string; type: string }> } = await treeRes.json();
+    const entries = (treeJson.tree || []).filter(
+      (node) => node.type === "blob" && node.path && (node.path === basePrefix || node.path.startsWith(`${basePrefix}/`))
+    );
+    if (entries.length === 0) {
+      throw new Error("No files found in the requested subpath");
+    }
+
+    for (const node of entries) {
+      const filePath = node.path;
+      const rawUrl = `https://raw.githubusercontent.com/${info.owner}/${info.repo}/${info.branch}/${filePath}`;
+      const fileRes = await fetch(rawUrl);
+      if (!fileRes.ok) continue;
+      const data = await fileRes.arrayBuffer();
+      const relative = filePath.slice(basePrefix.length).replace(/^\//, "");
+      zip.file(relative, data);
+    }
+
+    const blob = await zip.generateAsync({ type: "blob" });
+    const href = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = href;
+    const folderName = basePrefix.split("/").pop() || "skill";
+    link.download = `${folderName}.zip`;
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    URL.revokeObjectURL(href);
+    return true;
+  };
+
+  const handleDownloadSkill = useCallback(async (event: MouseEvent, item?: CarouselItem) => {
+    event.stopPropagation();
+    if (!item || !item.githubUrl) return;
+    const info = parseGithubInfo(item.githubUrl);
+    if (!info) {
+      console.warn("No valid GitHub URL to download for item", item.title);
+      return;
+    }
+
+    const filename = info.subpath
+      ? `${info.subpath.split("/").pop() || info.repo}.zip`
+      : `${info.repo}-${info.branch}.zip`;
+
+    if (info.subpath) {
+      try {
+        const result = await downloadSubfolderAsZip(info);
+        if (result) return;
+      } catch (error) {
+        console.error("Failed to download subfolder zip", error);
+        return;
+      }
+    }
+
+    const zipUrl = `https://codeload.github.com/${info.owner}/${info.repo}/zip/refs/heads/${info.branch}`;
+    const link = document.createElement("a");
+    link.href = zipUrl;
+    link.download = filename;
+    link.target = "_self";
+    link.rel = "noopener noreferrer";
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+  }, []);
 
   const getItemStyle = (index: number) => {
     if (isFocusMode) {
@@ -531,10 +629,10 @@ const CoverflowCarousel = ({
             const media = item.media ?? categoryMedia[item.category].src;
             const mediaAlt = item.media ? `${item.title} preview` : categoryMedia[item.category].alt;
             const isCoworkItem = (item.tags || []).some((tag) => tag.toLowerCase().includes("cowork"));
-            const displayTags =
-              (item.tags || [])
-                .filter((tag) => tag.toLowerCase() !== "coworker")
-                .slice(0, 3);
+            const displayTags = item.categoryTag
+              ? [item.categoryTag.split("→").slice(-1)[0]?.trim() || item.categoryTag]
+              : [];
+            const descriptionText = item.descriptionSection || item.about || item.hint;
             const meta = {
               level: item.level ?? defaultMeta.level,
               duration: item.duration ?? defaultMeta.duration,
@@ -672,11 +770,11 @@ const CoverflowCarousel = ({
                             {isCoworkItem && !isFocused ? (
                               <div className="flex-1 flex flex-col gap-3">
                                 <h3 className="text-xl font-semibold text-slate-900 leading-tight">
-                                  {item.title}
+                                  {item.title.replace(/-/g, " ").replace(/\s+/g, " ").trim()}
                                 </h3>
                                 <div className="space-y-1">
                                   <p className="text-sm text-slate-600 leading-relaxed line-clamp-4">
-                                    {item.about || item.hint}
+                                    {descriptionText}
                                   </p>
                                 </div>
                                 {displayTags.length > 0 && (
@@ -695,10 +793,10 @@ const CoverflowCarousel = ({
                             ) : (
                               <>
                                 <h3 className="text-xl font-semibold text-slate-900 leading-tight">
-                                  {item.title}
+                                  {item.title.replace(/-/g, " ").replace(/\s+/g, " ").trim()}
                                 </h3>
                                 <p className={`text-sm text-slate-600 ${isFocused ? "" : "line-clamp-3"}`}>
-                                  {item.hint}
+                                  {descriptionText}
                                 </p>
                                 {displayTags.length > 0 && (
                                   <div className="flex flex-wrap gap-2 pt-1">
@@ -761,39 +859,17 @@ const CoverflowCarousel = ({
                                     <Info className="w-4 h-4" style={{ color: colors.accent }} />
                                     <span>When to Use This Skill</span>
                                   </div>
-                                  <ul className="mt-3 space-y-2 text-sm text-slate-700">
-                                    {[
-                                      "Concise overview of the skill with expected outcomes.",
-                                      "When to deploy it and where it shines in a workflow.",
-                                      "Inputs, guardrails, and quick-start prompts.",
-                                    ].map((text, idx) => (
-                                      <li key={idx} className="flex items-start gap-2">
-                                        <span
-                                          className="mt-1 h-1.5 w-1.5 rounded-full"
-                                          style={{ backgroundColor: colors.accent }}
-                                        />
-                                        <span>{text}</span>
-                                      </li>
-                                    ))}
-                                  </ul>
+                                  <div className="mt-3">
+                                    {renderMarkdownBlock(item.whenToUseSection || item.about || descriptionText)}
+                                  </div>
                                 </div>
                                 <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
                                   <div className="flex items-center gap-2 text-sm font-semibold text-slate-800">
                                     <CheckCircle2 className="w-4 h-4" style={{ color: colors.accent }} />
                                     <span>Success signals</span>
                                   </div>
-                                  <div className="mt-3 space-y-2 text-sm text-slate-700">
-                                    <p>Clear, scannable outputs that show the skill is ready to use.</p>
-                                    <div className="flex flex-wrap gap-2">
-                                      {["Structured outline", "Examples ready", "Validated constraints", "Downloadable assets"].map((label) => (
-                                        <span
-                                          key={label}
-                                          className="px-3 py-1 rounded-full bg-slate-100 border border-slate-200 text-xs font-semibold text-slate-700"
-                                        >
-                                          {label}
-                                        </span>
-                                      ))}
-                                    </div>
+                                  <div className="mt-3">
+                                    {renderMarkdownBlock(item.successSignalsSection)}
                                   </div>
                                 </div>
                               </div>
@@ -846,10 +922,11 @@ const CoverflowCarousel = ({
                               </button>
                               <button
                                 type="button"
-                                className="inline-flex items-center gap-2 rounded-full bg-white px-4 py-2 text-sm font-semibold text-slate-700 border border-slate-200 shadow-sm transition hover:-translate-y-0.5"
-                                data-coverflow-download
-                                onClick={handleDownloadSkill}
-                              >
+                              className="inline-flex items-center gap-2 rounded-full bg-white px-4 py-2 text-sm font-semibold text-slate-700 border border-slate-200 shadow-sm transition hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed disabled:pointer-events-none"
+                              data-coverflow-download
+                              onClick={(e) => handleDownloadSkill(e, item)}
+                              disabled={!item.githubUrl}
+                            >
                                 <Download className="w-4 h-4" />
                                 Download
                               </button>
@@ -1047,7 +1124,7 @@ const CoverflowCarousel = ({
                               Set up Skill
                             </button>
                             <button
-                              className="inline-flex items-center gap-2 px-4 py-2 text-sm font-semibold rounded-full text-white shadow-sm transition"
+                              className="inline-flex items-center gap-2 px-4 py-2 text-sm font-semibold rounded-full text-white shadow-sm transition disabled:opacity-50 disabled:cursor-not-allowed disabled:pointer-events-none"
                               data-coverflow-download
                               onClickCapture={(event) => {
                                 if (!import.meta.env.DEV) return;
@@ -1056,7 +1133,8 @@ const CoverflowCarousel = ({
                                   pointerEvents: getComputedStyle(event.currentTarget).pointerEvents,
                                 });
                               }}
-                              onClick={handleDownloadSkill}
+                              onClick={(event) => handleDownloadSkill(event, item)}
+                              disabled={!item.githubUrl}
                               type="button"
                               style={{
                                 backgroundColor: accentColor,
