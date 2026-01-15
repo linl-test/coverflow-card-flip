@@ -6,7 +6,8 @@ import CoverflowCarousel, {
 } from "@/components/CoverflowCarousel";
 import RotatingText from "@/components/RotatingText";
 import FloatingSearchBar from "@/components/FloatingSearchBar";
-import { parseSkillFile, type ParsedSkill } from "@/lib/skillsParser";
+import { parseSkillFile, slugifySkill, type ParsedSkill } from "@/lib/skillsParser";
+import skillsManifest from "@/generated/skillsManifest.json";
 import { AnimatePresence, motion } from "framer-motion";
 import {
   Brain,
@@ -16,7 +17,7 @@ import {
   ShieldCheck,
   Sparkles,
   PanelsTopLeft,
-  Map,
+  Map as MapIcon,
   SlidersHorizontal,
   Link2,
   Terminal,
@@ -88,7 +89,7 @@ const carouselItems: CarouselItem[] = [
     title: "Easing Curves",
     hint: "Use interpolate() easing functions to avoid stiff, linear motion",
     category: "Reasoning",
-    icon: Map,
+    icon: MapIcon,
     media: "/easing-curves.png",
   },
   {
@@ -183,12 +184,17 @@ const trendingItems: CarouselItem[] = [
     title: "Easing Curves",
     hint: "Popular technique: Use interpolate() easing functions to avoid stiff, linear motion",
     category: "Reasoning",
-    icon: Map,
+    icon: MapIcon,
   },
 ];
 
-type CollectionType = "Trending" | "Cowork";
+type CollectionType = "Cowork" | "Trending";
 const defaultRole = "Software Engineer";
+const normalizeTag = (value?: string) =>
+  (value || "")
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/(^-|-$)+/g, "");
 
 const Index = () => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -199,10 +205,27 @@ const Index = () => {
   const [hideSearchBar, setHideSearchBar] = useState(false);
   const [activeRole, setActiveRole] = useState<string>(defaultRole);
   const footerRef = useRef<HTMLDivElement | null>(null);
-  const [parsedSkills, setParsedSkills] = useState<ParsedSkill[]>([]);
+  const [parsedSkills, setParsedSkills] = useState<ParsedSkill[]>(
+    Array.isArray(skillsManifest) ? (skillsManifest as ParsedSkill[]) : []
+  );
   const [skillsError, setSkillsError] = useState<string | null>(null);
   const searchActive = showSearchOverlay;
   const searchBarActive = isSearchFocused || showSearchOverlay;
+  const manifestMediaBySlug = useMemo(() => {
+    const map = new Map<string, string>();
+    const manifestArray = Array.isArray(skillsManifest) ? (skillsManifest as ParsedSkill[]) : [];
+    manifestArray.forEach((skill) => {
+      const slug = skill.slug || slugifySkill(skill.title || skill.source || "");
+      if (skill.media) {
+        map.set(slug, skill.media);
+      }
+    });
+    return map;
+  }, []);
+  const hasDisplayTag = useCallback((skill: ParsedSkill, keyword: string) => {
+    const normalized = normalizeTag(keyword);
+    return (skill.displayTags || []).some((tag) => normalizeTag(tag).includes(normalized));
+  }, []);
   const mapCategory = useCallback((value?: string): SkillCategory => {
     const normalized = (value || "").toLowerCase();
     if (normalized.includes("action")) return "Action";
@@ -247,53 +270,57 @@ const Index = () => {
     );
   };
   
-  const coworkerCards: CarouselItem[] = useMemo(() => {
-    return parsedSkills.map((skill, idx) => ({
-      id: 1000 + idx,
-      title: skill.title,
-      hint: skill.about || skill.description || "No description provided.",
-      category: mapCategory(skill.category),
-      icon: BookOpen,
-      tags: Array.from(new Set([...(skill.tags || []), "coworker"])),
-      about: skill.about,
-      author: skill.author,
-      instructor: skill.author,
-      role: skill.role || defaultRole,
-      githubUrl: skill.githubUrl,
-      categoryTag: skill.categoryTag,
-      descriptionSection: skill.descriptionSection,
-      whenToUseSection: skill.whenToUseSection,
-      successSignalsSection: skill.successSignalsSection,
-    }));
-  }, [mapCategory, parsedSkills]);
-
-  const baseCarouselItems = useMemo(
-    () =>
-      coworkerCards.length > 0
-        ? coworkerCards.map((item) => ({
-            ...item,
-            role: item.role || defaultRole,
-          }))
-        : [],
-    [coworkerCards]
+  const mapSkillToCard = useCallback(
+    (skill: ParsedSkill, idx: number): CarouselItem => {
+      const slug = skill.slug || slugifySkill(skill.title || skill.source || `skill-${idx}`);
+      const media = skill.media || manifestMediaBySlug.get(slug);
+      return {
+        id: 1000 + idx,
+        title: skill.title,
+        hint: skill.about || skill.description || "No description provided.",
+        category: mapCategory(skill.category),
+        icon: BookOpen,
+        tags: Array.from(new Set([...(skill.tags || []), "coworker"])),
+        about: skill.about,
+        author: skill.author,
+        instructor: skill.author,
+        role: skill.role || defaultRole,
+        githubUrl: skill.githubUrl,
+        categoryTag: skill.categoryTag,
+        descriptionSection: skill.descriptionSection,
+        whenToUseSection: skill.whenToUseSection,
+        successSignalsSection: skill.successSignalsSection,
+        media,
+      };
+    },
+    [defaultRole, manifestMediaBySlug, mapCategory]
   );
+
+  const coworkerCards: CarouselItem[] = useMemo(() => {
+    const filtered = parsedSkills.filter((skill) => hasDisplayTag(skill, "cowork"));
+    return filtered.map(mapSkillToCard);
+  }, [hasDisplayTag, mapSkillToCard, parsedSkills]);
+
+  const trendingCards: CarouselItem[] = useMemo(() => {
+    const filtered = parsedSkills.filter((skill) => hasDisplayTag(skill, "trending"));
+    return filtered.map(mapSkillToCard);
+  }, [hasDisplayTag, mapSkillToCard, parsedSkills]);
+
+  const baseCarouselItems = useMemo(() => coworkerCards, [coworkerCards]);
 
   const coworkTabItems = baseCarouselItems;
 
   const hasCoworkTab = baseCarouselItems.length > 0;
 
-  const collectionTabs = useMemo(
-    () => {
-      const tabs: { key: CollectionType; label: string }[] = [
-        { key: "Trending", label: "Trending Skills" },
-      ];
-      if (hasCoworkTab) {
-        tabs.push({ key: "Cowork", label: "Cowork Skills" });
-      }
-      return tabs;
-    },
-    [hasCoworkTab]
-  );
+  const collectionTabs = useMemo(() => {
+    const tabs: { key: CollectionType; label: string }[] = [
+      { key: "Trending", label: "Trending Skills" },
+    ];
+    if (hasCoworkTab) {
+      tabs.push({ key: "Cowork", label: "Cowork Skills" });
+    }
+    return tabs;
+  }, [hasCoworkTab]);
 
   const roleTabs = useMemo(() => {
     const unique = new Set<string>();
@@ -309,25 +336,19 @@ const Index = () => {
     return "Most popular skills this week";
   }, [activeCollection, hasCoworkTab]);
 
-  const collectionItems = useMemo(
-    () => {
-      if (activeCollection === "Cowork") return coworkTabItems;
-      return trendingItems;
-    },
-    [activeCollection, coworkTabItems]
-  );
+  const collectionItems = useMemo(() => {
+    if (activeCollection === "Cowork") return coworkTabItems;
+    return trendingCards;
+  }, [activeCollection, coworkTabItems, trendingCards]);
   
-  const filteredItems = useMemo(
-    () => baseCarouselItems,
-    [baseCarouselItems]
-  );
+  const filteredItems = useMemo(() => baseCarouselItems, [baseCarouselItems]);
   const searchableItems = useMemo(() => {
     const map = new globalThis.Map<number, CarouselItem>();
-    [...baseCarouselItems, ...trendingItems].forEach((item) => {
+    [...baseCarouselItems, ...trendingCards].forEach((item) => {
       map.set(item.id, item);
     });
     return Array.from(map.values());
-  }, [baseCarouselItems]);
+  }, [baseCarouselItems, trendingCards]);
 
   const searchResults = useMemo(() => {
     const term = searchQuery.trim().toLowerCase();
@@ -392,28 +413,8 @@ const Index = () => {
   }, []);
 
   useEffect(() => {
-    const loadSkills = async () => {
-      try {
-        const imports = import.meta.glob("/public/skills/*.md", { query: "?raw", import: "default" });
-        const entries = Object.entries(imports);
-        const loaded: ParsedSkill[] = [];
-
-        for (const [path, loader] of entries) {
-          const raw = await (loader as () => Promise<string>)();
-          loaded.push(parseSkillFile(raw, path));
-        }
-
-        setParsedSkills(loaded);
-        setSkillsError(null);
-      } catch (error) {
-        if (import.meta.env.DEV) {
-          console.error("Failed to load skills", error);
-        }
-        setSkillsError("Unable to load skills from /public/skills/*.md. Please ensure the files exist.");
-      }
-    };
-
-    loadSkills();
+    // Already loaded from generated manifest; no dynamic imports from /public.
+    setSkillsError(null);
   }, []);
 
   useEffect(() => {

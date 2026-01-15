@@ -5,6 +5,7 @@
 - GitHub: https://github.com/Exploration-labs/Nates-Substack-Skills/tree/main/learning-capture
 - Role Tag: Research
 - Category Tag: Learning & Adaptability Skills → Learning agility
+- Display Tag:cowork
 
 ## Description
 

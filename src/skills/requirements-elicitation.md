@@ -5,6 +5,7 @@
 - GitHub: https://github.com/Exploration-labs/Nates-Substack-Skills/tree/main/requirements-elicitation
 - Role Tag: Product Manager
 - Category Tag: Interpersonal & Social Skills → Stakeholder management
+- Display Tag:cowork
 
 ## Description
 

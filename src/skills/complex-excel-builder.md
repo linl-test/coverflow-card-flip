@@ -5,6 +5,7 @@
 - GitHub: https://github.com/Exploration-labs/Nates-Substack-Skills/tree/main/complex-excel-builder
 - Role Tag: Data Scientist / Analyst
 - Category Tag: Technical Skills → Data analysis & engineering
+- Display Tag:coworks
 
 ## Description
 

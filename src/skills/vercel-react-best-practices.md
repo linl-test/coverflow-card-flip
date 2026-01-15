@@ -5,6 +5,7 @@
 - GitHub: https://github.com/vercel-labs/agent-skills/tree/main/skills/react-best-practices
 - Role Tag: Software Engineer
 - Category Tag: Technical Skills → Programming & software development
+- Display Tag:cowork, trending
 
 ## Description
 

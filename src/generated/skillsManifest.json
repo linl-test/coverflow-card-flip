@@ -1,0 +1,576 @@
+[
+  {
+    "title": "xlsx-editor",
+    "description": "- Specialized guidance for editing EXISTING Excel files with emphasis on preserving formulas, formatting, and structure across multiple tabs\n- Use this skill when modifying, updating, or adding data to existing",
+    "slug": "xlsx-editor",
+    "displayTags": [
+      "cowork",
+      "trending"
+    ],
+    "tags": [
+      "Technical Skills",
+      "Data analysis & engineering",
+      "Data Scientist / Analyst",
+      "coworker"
+    ],
+    "category": "Technical Skills",
+    "body": "# xlsx-editor\n\n- Author: Unknown\n- Updated: Unknown\n- GitHub: https://github.com/Exploration-labs/Nates-Substack-Skills/tree/main/xlsx-editor\n- Role Tag: Data Scientist / Analyst\n- Category Tag: Technical Skills → Data analysis & engineering\n- Display Tag:cowork, trending\n\n## Description\n\nSpecialized guidance for editing EXISTING Excel files with emphasis on preserving formulas, formatting, and structure across multiple tabs. Use this skill when modifying, updating, or adding data to existing .xlsx files where maintaining integrity is critical—particularly for multi-tab workbooks, complex formulas, formatted tables, and data that must maintain sort order and relationships across sheets.\n\n## When to use this skill\n\n- Specialized guidance for editing EXISTING Excel files with emphasis on preserving formulas, formatting, and structure across multiple tabs\n- Use this skill when modifying, updating, or adding data to existing\n\n## Success signals\n\n- Outputs align with the goal of the xlsx-editor skill and follow its workflows/templates.\n- Recommendations or deliverables are tailored to the user context and requirements.\n- Results are clear, consistent, and ready for use (clean formatting/structure, actionable steps).",
+    "source": "xlsx-editor.md",
+    "author": "Unknown",
+    "about": "- Specialized guidance for editing EXISTING Excel files with emphasis on preserving formulas, formatting, and structure across multiple tabs\n- Use this skill when modifying, updating, or adding data to existing",
+    "role": "Data Scientist / Analyst",
+    "githubUrl": "https://github.com/Exploration-labs/Nates-Substack-Skills/tree/main/xlsx-editor",
+    "updated": "Unknown",
+    "categoryTag": "Technical Skills → Data analysis & engineering",
+    "descriptionSection": "Specialized guidance for editing EXISTING Excel files with emphasis on preserving formulas, formatting, and structure across multiple tabs. Use this skill when modifying, updating, or adding data to existing .xlsx files where maintaining integrity is critical—particularly for multi-tab workbooks, complex formulas, formatted tables, and data that must maintain sort order and relationships across sheets.",
+    "whenToUseSection": "- Specialized guidance for editing EXISTING Excel files with emphasis on preserving formulas, formatting, and structure across multiple tabs\n- Use this skill when modifying, updating, or adding data to existing",
+    "successSignalsSection": "- Outputs align with the goal of the xlsx-editor skill and follow its workflows/templates.\n- Recommendations or deliverables are tailored to the user context and requirements.\n- Results are clear, consistent, and ready for use (clean formatting/structure, actionable steps).",
+    "media": "/skills/head/Screenshot 2026-01-15 at 12.25.47.png"
+  },
+  {
+    "title": "vibe-coding",
+    "description": "- Comprehensive guide for AI-assisted vibe coding\n- Use when the user wants to build applications through natural language prompts using tools like Lovable, Cursor, Replit, or Bolt",
+    "slug": "vibe-coding",
+    "displayTags": [
+      "cowork",
+      "trending"
+    ],
+    "tags": [
+      "Technical Skills",
+      "Programming & software development",
+      "Software Engineer",
+      "coworker"
+    ],
+    "category": "Technical Skills",
+    "body": "# vibe-coding\n\n- Author: Unknown\n- Updated: Unknown\n- GitHub: https://github.com/Exploration-labs/Nates-Substack-Skills/tree/main/vibe-coding\n- Role Tag: Software Engineer\n- Category Tag: Technical Skills → Programming & software development\n- Display Tag:cowork, trending\n\n## Description\n\nComprehensive guide for AI-assisted vibe coding. Use when the user wants to build applications through natural language prompts using tools like Lovable, Cursor, Replit, or Bolt. Includes best practices, pitfall awareness, tool-specific guidance, architectural decision support, and MVP scope definition with a bias toward cutting features aggressively to ship faster.\n\n## When to use this skill\n\n- Comprehensive guide for AI-assisted vibe coding\n- Use when the user wants to build applications through natural language prompts using tools like Lovable, Cursor, Replit, or Bolt\n\n## Success signals\n\n- Outputs align with the goal of the vibe-coding skill and follow its workflows/templates.\n- Recommendations or deliverables are tailored to the user context and requirements.\n- Results are clear, consistent, and ready for use (clean formatting/structure, actionable steps).",
+    "source": "vibe-coding.md",
+    "author": "Unknown",
+    "about": "- Comprehensive guide for AI-assisted vibe coding\n- Use when the user wants to build applications through natural language prompts using tools like Lovable, Cursor, Replit, or Bolt",
+    "role": "Software Engineer",
+    "githubUrl": "https://github.com/Exploration-labs/Nates-Substack-Skills/tree/main/vibe-coding",
+    "updated": "Unknown",
+    "categoryTag": "Technical Skills → Programming & software development",
+    "descriptionSection": "Comprehensive guide for AI-assisted vibe coding. Use when the user wants to build applications through natural language prompts using tools like Lovable, Cursor, Replit, or Bolt. Includes best practices, pitfall awareness, tool-specific guidance, architectural decision support, and MVP scope definition with a bias toward cutting features aggressively to ship faster.",
+    "whenToUseSection": "- Comprehensive guide for AI-assisted vibe coding\n- Use when the user wants to build applications through natural language prompts using tools like Lovable, Cursor, Replit, or Bolt",
+    "successSignalsSection": "- Outputs align with the goal of the vibe-coding skill and follow its workflows/templates.\n- Recommendations or deliverables are tailored to the user context and requirements.\n- Results are clear, consistent, and ready for use (clean formatting/structure, actionable steps).",
+    "media": "/skills/head/Screenshot 2026-01-15 at 12.26.12.png"
+  },
+  {
+    "title": "Vercel React Best Practices",
+    "description": "- Writing new React components or Next.js pages and need best-practice performance guidance.\n- Reviewing or refactoring React/Next.js code for data fetching, rendering, or bundle-size optimizations.\n- Optimizing load times or eliminating waterfalls in server/client data flows.",
+    "slug": "vercel-react-best-practices",
+    "displayTags": [
+      "cowork",
+      "trending"
+    ],
+    "tags": [
+      "Technical Skills",
+      "Programming & software development",
+      "Software Engineer",
+      "coworker"
+    ],
+    "category": "Technical Skills",
+    "body": "# Vercel React Best Practices\n\n- Author: Andrew Qu\n- Updated: 2026-01-15T01:26:08Z\n- GitHub: https://github.com/vercel-labs/agent-skills/tree/main/skills/react-best-practices\n- Role Tag: Software Engineer\n- Category Tag: Technical Skills → Programming & software development\n- Display Tag:cowork, trending\n\n## Description\n\nReact and Next.js performance optimization guidelines from Vercel Engineering. Use when writing, reviewing, or refactoring React/Next.js code to ensure optimal performance patterns. Triggers on tasks involving React components, Next.js pages, data fetching, bundle optimization, or performance improvements.\n\n## When to use this skill\n\n- Writing new React components or Next.js pages and need best-practice performance guidance.\n- Reviewing or refactoring React/Next.js code for data fetching, rendering, or bundle-size optimizations.\n- Optimizing load times or eliminating waterfalls in server/client data flows.\n\n## Success signals\n\n- Code applies the prioritized rules (waterfall elimination, bundle-size reductions, server/client fetch efficiency).\n- Refactors reduce re-renders, improve load times, and avoid regressions across routes/pages.\n- Resulting code is production-ready: consistent patterns, smaller bundles, and measurable performance improvements.",
+    "source": "vercel-react-best-practices.md",
+    "author": "Andrew Qu",
+    "about": "- Writing new React components or Next.js pages and need best-practice performance guidance.\n- Reviewing or refactoring React/Next.js code for data fetching, rendering, or bundle-size optimizations.\n- Optimizing load times or eliminating waterfalls in server/client data flows.",
+    "role": "Software Engineer",
+    "githubUrl": "https://github.com/vercel-labs/agent-skills/tree/main/skills/react-best-practices",
+    "updated": "2026-01-15T01:26:08Z",
+    "categoryTag": "Technical Skills → Programming & software development",
+    "descriptionSection": "React and Next.js performance optimization guidelines from Vercel Engineering. Use when writing, reviewing, or refactoring React/Next.js code to ensure optimal performance patterns. Triggers on tasks involving React components, Next.js pages, data fetching, bundle optimization, or performance improvements.",
+    "whenToUseSection": "- Writing new React components or Next.js pages and need best-practice performance guidance.\n- Reviewing or refactoring React/Next.js code for data fetching, rendering, or bundle-size optimizations.\n- Optimizing load times or eliminating waterfalls in server/client data flows.",
+    "successSignalsSection": "- Code applies the prioritized rules (waterfall elimination, bundle-size reductions, server/client fetch efficiency).\n- Refactors reduce re-renders, improve load times, and avoid regressions across routes/pages.\n- Resulting code is production-ready: consistent patterns, smaller bundles, and measurable performance improvements.",
+    "media": "/skills/head/vercel-react-best-practices.png"
+  },
+  {
+    "title": "token-budget-advisor",
+    "description": "- Proactive token budget assessment and task chunking strategy\n- Use this skill when queries involve multiple large file uploads, requests for comprehensive multi-document analysis, complex multi-step workflows with heavy research (10+ tool calls), phrases like \"complete analysis\", \"full audit\", \"thorough review\", \"deep dive\", or tasks combining extensive research with large output artifacts",
+    "slug": "token-budget-advisor",
+    "displayTags": [
+      "cowork"
+    ],
+    "tags": [
+      "Technical Skills",
+      "Programming & software development",
+      "Software Engineer",
+      "coworker"
+    ],
+    "category": "Technical Skills",
+    "body": "# token-budget-advisor\n\n- Author: Unknown\n- Updated: Unknown\n- GitHub: https://github.com/Exploration-labs/Nates-Substack-Skills/tree/main/token-budget-advisor\n- Role Tag: Software Engineer\n- Category Tag: Technical Skills → Programming & software development\n- Display Tag:cowork\n\n## Description\n\nProactive token budget assessment and task chunking strategy. Use this skill when queries involve multiple large file uploads, requests for comprehensive multi-document analysis, complex multi-step workflows with heavy research (10+ tool calls), phrases like \"complete analysis\", \"full audit\", \"thorough review\", \"deep dive\", or tasks combining extensive research with large output artifacts. This skill helps assess token consumption risk early and recommend chunking strategies before beginning work.\n\n## When to use this skill\n\n- Proactive token budget assessment and task chunking strategy\n- Use this skill when queries involve multiple large file uploads, requests for comprehensive multi-document analysis, complex multi-step workflows with heavy research (10+ tool calls), phrases like \"complete analysis\", \"full audit\", \"thorough review\", \"deep dive\", or tasks combining extensive research with large output artifacts\n\n## Success signals\n\n- Outputs align with the goal of the token-budget-advisor skill and follow its workflows/templates.\n- Recommendations or deliverables are tailored to the user context and requirements.\n- Results are clear, consistent, and ready for use (clean formatting/structure, actionable steps).",
+    "source": "token-budget-advisor.md",
+    "author": "Unknown",
+    "about": "- Proactive token budget assessment and task chunking strategy\n- Use this skill when queries involve multiple large file uploads, requests for comprehensive multi-document analysis, complex multi-step workflows with heavy research (10+ tool calls), phrases like \"complete analysis\", \"full audit\", \"thorough review\", \"deep dive\", or tasks combining extensive research with large output artifacts",
+    "role": "Software Engineer",
+    "githubUrl": "https://github.com/Exploration-labs/Nates-Substack-Skills/tree/main/token-budget-advisor",
+    "updated": "Unknown",
+    "categoryTag": "Technical Skills → Programming & software development",
+    "descriptionSection": "Proactive token budget assessment and task chunking strategy. Use this skill when queries involve multiple large file uploads, requests for comprehensive multi-document analysis, complex multi-step workflows with heavy research (10+ tool calls), phrases like \"complete analysis\", \"full audit\", \"thorough review\", \"deep dive\", or tasks combining extensive research with large output artifacts. This skill helps assess token consumption risk early and recommend chunking strategies before beginning work.",
+    "whenToUseSection": "- Proactive token budget assessment and task chunking strategy\n- Use this skill when queries involve multiple large file uploads, requests for comprehensive multi-document analysis, complex multi-step workflows with heavy research (10+ tool calls), phrases like \"complete analysis\", \"full audit\", \"thorough review\", \"deep dive\", or tasks combining extensive research with large output artifacts",
+    "successSignalsSection": "- Outputs align with the goal of the token-budget-advisor skill and follow its workflows/templates.\n- Recommendations or deliverables are tailored to the user context and requirements.\n- Results are clear, consistent, and ready for use (clean formatting/structure, actionable steps).",
+    "media": "/skills/head/Screenshot 2026-01-15 at 12.26.51.png"
+  },
+  {
+    "title": "skill-testing-framework",
+    "description": "- Provides test cases and validation tools for skills\n- Use when creating tests for a new skill, adding regression tests after skill updates, running test suites to verify skill functionality, or validating that skill outputs match expected results",
+    "slug": "skill-testing-framework",
+    "displayTags": [
+      "cowork"
+    ],
+    "tags": [
+      "Technical Skills",
+      "Programming & software development",
+      "Software Engineer",
+      "coworker"
+    ],
+    "category": "Technical Skills",
+    "body": "# skill-testing-framework\n\n- Author: Unknown\n- Updated: Unknown\n- GitHub: https://github.com/Exploration-labs/Nates-Substack-Skills/tree/main/skill-testing-framework\n- Role Tag: Software Engineer\n- Category Tag: Technical Skills → Programming & software development\n- Display Tag:cowork\n\n## Description\n\nProvides test cases and validation tools for skills. Use when creating tests for a new skill, adding regression tests after skill updates, running test suites to verify skill functionality, or validating that skill outputs match expected results. Supports unit tests, integration tests, and regression tests with input/output pair validation.\n\n## When to use this skill\n\n- Provides test cases and validation tools for skills\n- Use when creating tests for a new skill, adding regression tests after skill updates, running test suites to verify skill functionality, or validating that skill outputs match expected results\n\n## Success signals\n\n- Outputs align with the goal of the skill-testing-framework skill and follow its workflows/templates.\n- Recommendations or deliverables are tailored to the user context and requirements.\n- Results are clear, consistent, and ready for use (clean formatting/structure, actionable steps).",
+    "source": "skill-testing-framework.md",
+    "author": "Unknown",
+    "about": "- Provides test cases and validation tools for skills\n- Use when creating tests for a new skill, adding regression tests after skill updates, running test suites to verify skill functionality, or validating that skill outputs match expected results",
+    "role": "Software Engineer",
+    "githubUrl": "https://github.com/Exploration-labs/Nates-Substack-Skills/tree/main/skill-testing-framework",
+    "updated": "Unknown",
+    "categoryTag": "Technical Skills → Programming & software development",
+    "descriptionSection": "Provides test cases and validation tools for skills. Use when creating tests for a new skill, adding regression tests after skill updates, running test suites to verify skill functionality, or validating that skill outputs match expected results. Supports unit tests, integration tests, and regression tests with input/output pair validation.",
+    "whenToUseSection": "- Provides test cases and validation tools for skills\n- Use when creating tests for a new skill, adding regression tests after skill updates, running test suites to verify skill functionality, or validating that skill outputs match expected results",
+    "successSignalsSection": "- Outputs align with the goal of the skill-testing-framework skill and follow its workflows/templates.\n- Recommendations or deliverables are tailored to the user context and requirements.\n- Results are clear, consistent, and ready for use (clean formatting/structure, actionable steps).",
+    "media": "/skills/head/Screenshot 2026-01-15 at 12.27.10.png"
+  },
+  {
+    "title": "skill-security-analyzer",
+    "description": "- Comprehensive security risk analysis for Claude skills\n- Use when asked to analyze security risks, review security stance, audit skills for vulnerabilities, check security before deployment, or evaluate safety of skill files",
+    "slug": "skill-security-analyzer",
+    "displayTags": [
+      "cowork"
+    ],
+    "tags": [
+      "Technical Skills",
+      "IT",
+      "cloud",
+      "cybersecurity",
+      "Software Engineer",
+      "coworker"
+    ],
+    "category": "Technical Skills",
+    "body": "# skill-security-analyzer\n\n- Author: Unknown\n- Updated: Unknown\n- GitHub: https://github.com/Exploration-labs/Nates-Substack-Skills/tree/main/skill-security-analyzer\n- Role Tag: Software Engineer\n- Category Tag: Technical Skills → IT, cloud, cybersecurity\n- Display Tag:cowork\n\n## Description\n\nComprehensive security risk analysis for Claude skills. Use when asked to analyze security risks, review security stance, audit skills for vulnerabilities, check security before deployment, or evaluate safety of skill files. Triggers include \"analyze security,\" \"security risks,\" \"security audit,\" \"security review,\" \"is this skill safe,\" or \"check for vulnerabilities.\"\n\n## When to use this skill\n\n- Comprehensive security risk analysis for Claude skills\n- Use when asked to analyze security risks, review security stance, audit skills for vulnerabilities, check security before deployment, or evaluate safety of skill files\n\n## Success signals\n\n- Outputs align with the goal of the skill-security-analyzer skill and follow its workflows/templates.\n- Recommendations or deliverables are tailored to the user context and requirements.\n- Results are clear, consistent, and ready for use (clean formatting/structure, actionable steps).",
+    "source": "skill-security-analyzer.md",
+    "author": "Unknown",
+    "about": "- Comprehensive security risk analysis for Claude skills\n- Use when asked to analyze security risks, review security stance, audit skills for vulnerabilities, check security before deployment, or evaluate safety of skill files",
+    "role": "Software Engineer",
+    "githubUrl": "https://github.com/Exploration-labs/Nates-Substack-Skills/tree/main/skill-security-analyzer",
+    "updated": "Unknown",
+    "categoryTag": "Technical Skills → IT, cloud, cybersecurity",
+    "descriptionSection": "Comprehensive security risk analysis for Claude skills. Use when asked to analyze security risks, review security stance, audit skills for vulnerabilities, check security before deployment, or evaluate safety of skill files. Triggers include \"analyze security,\" \"security risks,\" \"security audit,\" \"security review,\" \"is this skill safe,\" or \"check for vulnerabilities.\"",
+    "whenToUseSection": "- Comprehensive security risk analysis for Claude skills\n- Use when asked to analyze security risks, review security stance, audit skills for vulnerabilities, check security before deployment, or evaluate safety of skill files",
+    "successSignalsSection": "- Outputs align with the goal of the skill-security-analyzer skill and follow its workflows/templates.\n- Recommendations or deliverables are tailored to the user context and requirements.\n- Results are clear, consistent, and ready for use (clean formatting/structure, actionable steps).",
+    "media": "/skills/head/Screenshot 2026-01-15 at 12.27.29.png"
+  },
+  {
+    "title": "skill-performance-profiler",
+    "description": "- Analyzes skill usage patterns across conversations to track token consumption, identify heavy vs\n- lightweight skills, measure invocation frequency, detect co-occurrence patterns, and suggest consolidation opportunities",
+    "slug": "skill-performance-profiler",
+    "displayTags": [
+      "cowork"
+    ],
+    "tags": [
+      "Technical Skills",
+      "Programming & software development",
+      "Software Engineer",
+      "coworker"
+    ],
+    "category": "Technical Skills",
+    "body": "# skill-performance-profiler\n\n- Author: Unknown\n- Updated: Unknown\n- GitHub: https://github.com/Exploration-labs/Nates-Substack-Skills/tree/main/skill-performance-profiler\n- Role Tag: Software Engineer\n- Category Tag: Technical Skills → Programming & software development\n- Display Tag:cowork\n\n## Description\n\nAnalyzes skill usage patterns across conversations to track token consumption, identify heavy vs. lightweight skills, measure invocation frequency, detect co-occurrence patterns, and suggest consolidation opportunities. Use when the user asks to analyze skill performance, optimize skill usage, identify token-heavy skills, find consolidation opportunities, or review skill metrics.\n\n## When to use this skill\n\n- Analyzes skill usage patterns across conversations to track token consumption, identify heavy vs\n- lightweight skills, measure invocation frequency, detect co-occurrence patterns, and suggest consolidation opportunities\n\n## Success signals\n\n- Outputs align with the goal of the skill-performance-profiler skill and follow its workflows/templates.\n- Recommendations or deliverables are tailored to the user context and requirements.\n- Results are clear, consistent, and ready for use (clean formatting/structure, actionable steps).",
+    "source": "skill-performance-profiler.md",
+    "author": "Unknown",
+    "about": "- Analyzes skill usage patterns across conversations to track token consumption, identify heavy vs\n- lightweight skills, measure invocation frequency, detect co-occurrence patterns, and suggest consolidation opportunities",
+    "role": "Software Engineer",
+    "githubUrl": "https://github.com/Exploration-labs/Nates-Substack-Skills/tree/main/skill-performance-profiler",
+    "updated": "Unknown",
+    "categoryTag": "Technical Skills → Programming & software development",
+    "descriptionSection": "Analyzes skill usage patterns across conversations to track token consumption, identify heavy vs. lightweight skills, measure invocation frequency, detect co-occurrence patterns, and suggest consolidation opportunities. Use when the user asks to analyze skill performance, optimize skill usage, identify token-heavy skills, find consolidation opportunities, or review skill metrics.",
+    "whenToUseSection": "- Analyzes skill usage patterns across conversations to track token consumption, identify heavy vs\n- lightweight skills, measure invocation frequency, detect co-occurrence patterns, and suggest consolidation opportunities",
+    "successSignalsSection": "- Outputs align with the goal of the skill-performance-profiler skill and follow its workflows/templates.\n- Recommendations or deliverables are tailored to the user context and requirements.\n- Results are clear, consistent, and ready for use (clean formatting/structure, actionable steps).",
+    "media": "/skills/head/Screenshot 2026-01-15 at 12.27.54.png"
+  },
+  {
+    "title": "skill-gap-analyzer",
+    "description": "- Analyzes the user's skill library to identify coverage gaps, redundant overlaps, and optimization opportunities\n- Use when users want to understand their skill ecosystem, optimize their skill collection, find missing capabilities for common workflows, or reduce redundant coverage",
+    "slug": "skill-gap-analyzer",
+    "displayTags": [
+      "cowork"
+    ],
+    "tags": [
+      "Leadership & Management Skills",
+      "Strategic thinking",
+      "Engineering Manager",
+      "coworker"
+    ],
+    "category": "Leadership & Management Skills",
+    "body": "# skill-gap-analyzer\n\n- Author: Unknown\n- Updated: Unknown\n- GitHub: https://github.com/Exploration-labs/Nates-Substack-Skills/tree/main/skill-gap-analyzer\n- Role Tag: Engineering Manager\n- Category Tag: Leadership & Management Skills → Strategic thinking\n- Display Tag:cowork\n\n## Description\n\nAnalyzes the user's skill library to identify coverage gaps, redundant overlaps, and optimization opportunities. Use when users want to understand their skill ecosystem, optimize their skill collection, find missing capabilities for common workflows, or reduce redundant coverage. Triggered by requests like \"analyze my skills,\" \"what skills am I missing,\" \"are any of my skills redundant,\" or \"optimize my skill library.\"\n\n## When to use this skill\n\n- Analyzes the user's skill library to identify coverage gaps, redundant overlaps, and optimization opportunities\n- Use when users want to understand their skill ecosystem, optimize their skill collection, find missing capabilities for common workflows, or reduce redundant coverage\n\n## Success signals\n\n- Outputs align with the goal of the skill-gap-analyzer skill and follow its workflows/templates.\n- Recommendations or deliverables are tailored to the user context and requirements.\n- Results are clear, consistent, and ready for use (clean formatting/structure, actionable steps).",
+    "source": "skill-gap-analyzer.md",
+    "author": "Unknown",
+    "about": "- Analyzes the user's skill library to identify coverage gaps, redundant overlaps, and optimization opportunities\n- Use when users want to understand their skill ecosystem, optimize their skill collection, find missing capabilities for common workflows, or reduce redundant coverage",
+    "role": "Engineering Manager",
+    "githubUrl": "https://github.com/Exploration-labs/Nates-Substack-Skills/tree/main/skill-gap-analyzer",
+    "updated": "Unknown",
+    "categoryTag": "Leadership & Management Skills → Strategic thinking",
+    "descriptionSection": "Analyzes the user's skill library to identify coverage gaps, redundant overlaps, and optimization opportunities. Use when users want to understand their skill ecosystem, optimize their skill collection, find missing capabilities for common workflows, or reduce redundant coverage. Triggered by requests like \"analyze my skills,\" \"what skills am I missing,\" \"are any of my skills redundant,\" or \"optimize my skill library.\"",
+    "whenToUseSection": "- Analyzes the user's skill library to identify coverage gaps, redundant overlaps, and optimization opportunities\n- Use when users want to understand their skill ecosystem, optimize their skill collection, find missing capabilities for common workflows, or reduce redundant coverage",
+    "successSignalsSection": "- Outputs align with the goal of the skill-gap-analyzer skill and follow its workflows/templates.\n- Recommendations or deliverables are tailored to the user context and requirements.\n- Results are clear, consistent, and ready for use (clean formatting/structure, actionable steps).",
+    "media": "/skills/head/Screenshot 2026-01-15 at 12.28.03.png"
+  },
+  {
+    "title": "skill-doc-generator",
+    "description": "- Auto-generates standardized README documentation from SKILL\n- md files, validates consistency (frontmatter, descriptions, terminology), and creates usage examples",
+    "slug": "skill-doc-generator",
+    "displayTags": [
+      "cowork"
+    ],
+    "tags": [
+      "Communication Skills",
+      "Written communication",
+      "Software Engineer",
+      "coworker"
+    ],
+    "category": "Communication Skills",
+    "body": "# skill-doc-generator\n\n- Author: Unknown\n- Updated: Unknown\n- GitHub: https://github.com/Exploration-labs/Nates-Substack-Skills/tree/main/skill-doc-generator\n- Role Tag: Software Engineer\n- Category Tag: Communication Skills → Written communication\n- Display Tag:cowork\n\n## Description\n\nAuto-generates standardized README documentation from SKILL.md files, validates consistency (frontmatter, descriptions, terminology), and creates usage examples. Use when documenting individual skills, generating docs for multiple skills in a directory, or validating skill quality standards.\n\n## When to use this skill\n\n- Auto-generates standardized README documentation from SKILL\n- md files, validates consistency (frontmatter, descriptions, terminology), and creates usage examples\n\n## Success signals\n\n- Outputs align with the goal of the skill-doc-generator skill and follow its workflows/templates.\n- Recommendations or deliverables are tailored to the user context and requirements.\n- Results are clear, consistent, and ready for use (clean formatting/structure, actionable steps).",
+    "source": "skill-doc-generator.md",
+    "author": "Unknown",
+    "about": "- Auto-generates standardized README documentation from SKILL\n- md files, validates consistency (frontmatter, descriptions, terminology), and creates usage examples",
+    "role": "Software Engineer",
+    "githubUrl": "https://github.com/Exploration-labs/Nates-Substack-Skills/tree/main/skill-doc-generator",
+    "updated": "Unknown",
+    "categoryTag": "Communication Skills → Written communication",
+    "descriptionSection": "Auto-generates standardized README documentation from SKILL.md files, validates consistency (frontmatter, descriptions, terminology), and creates usage examples. Use when documenting individual skills, generating docs for multiple skills in a directory, or validating skill quality standards.",
+    "whenToUseSection": "- Auto-generates standardized README documentation from SKILL\n- md files, validates consistency (frontmatter, descriptions, terminology), and creates usage examples",
+    "successSignalsSection": "- Outputs align with the goal of the skill-doc-generator skill and follow its workflows/templates.\n- Recommendations or deliverables are tailored to the user context and requirements.\n- Results are clear, consistent, and ready for use (clean formatting/structure, actionable steps).",
+    "media": "/skills/head/Screenshot 2026-01-15 at 12.28.45.png"
+  },
+  {
+    "title": "skill-dependency-mapper",
+    "description": "- Analyzes skill ecosystem to visualize dependencies, identify workflow bottlenecks, and recommend optimal skill stacks\n- Use when asked about skill combinations, workflow optimization, bottleneck identification, or which skills work together",
+    "slug": "skill-dependency-mapper",
+    "displayTags": [
+      "cowork"
+    ],
+    "tags": [
+      "Technical Skills",
+      "Programming & software development",
+      "Software Engineer",
+      "coworker"
+    ],
+    "category": "Technical Skills",
+    "body": "# skill-dependency-mapper\n\n- Author: Unknown\n- Updated: Unknown\n- GitHub: https://github.com/Exploration-labs/Nates-Substack-Skills/tree/main/skill-dependency-mapper\n- Role Tag: Software Engineer\n- Category Tag: Technical Skills → Programming & software development\n- Display Tag:cowork\n\n## Description\n\nAnalyzes skill ecosystem to visualize dependencies, identify workflow bottlenecks, and recommend optimal skill stacks. Use when asked about skill combinations, workflow optimization, bottleneck identification, or which skills work together. Triggers include phrases like \"which skills work together\", \"skill dependencies\", \"workflow bottlenecks\", \"optimal skill stack\", or \"recommend skills for\".\n\n## When to use this skill\n\n- Analyzes skill ecosystem to visualize dependencies, identify workflow bottlenecks, and recommend optimal skill stacks\n- Use when asked about skill combinations, workflow optimization, bottleneck identification, or which skills work together\n\n## Success signals\n\n- Outputs align with the goal of the skill-dependency-mapper skill and follow its workflows/templates.\n- Recommendations or deliverables are tailored to the user context and requirements.\n- Results are clear, consistent, and ready for use (clean formatting/structure, actionable steps).",
+    "source": "skill-dependency-mapper.md",
+    "author": "Unknown",
+    "about": "- Analyzes skill ecosystem to visualize dependencies, identify workflow bottlenecks, and recommend optimal skill stacks\n- Use when asked about skill combinations, workflow optimization, bottleneck identification, or which skills work together",
+    "role": "Software Engineer",
+    "githubUrl": "https://github.com/Exploration-labs/Nates-Substack-Skills/tree/main/skill-dependency-mapper",
+    "updated": "Unknown",
+    "categoryTag": "Technical Skills → Programming & software development",
+    "descriptionSection": "Analyzes skill ecosystem to visualize dependencies, identify workflow bottlenecks, and recommend optimal skill stacks. Use when asked about skill combinations, workflow optimization, bottleneck identification, or which skills work together. Triggers include phrases like \"which skills work together\", \"skill dependencies\", \"workflow bottlenecks\", \"optimal skill stack\", or \"recommend skills for\".",
+    "whenToUseSection": "- Analyzes skill ecosystem to visualize dependencies, identify workflow bottlenecks, and recommend optimal skill stacks\n- Use when asked about skill combinations, workflow optimization, bottleneck identification, or which skills work together",
+    "successSignalsSection": "- Outputs align with the goal of the skill-dependency-mapper skill and follow its workflows/templates.\n- Recommendations or deliverables are tailored to the user context and requirements.\n- Results are clear, consistent, and ready for use (clean formatting/structure, actionable steps).",
+    "media": "/skills/head/Screenshot 2026-01-15 at 12.28.54.png"
+  },
+  {
+    "title": "skill-debugging-assistant",
+    "description": "- Debug, diagnose, and troubleshoot skill issues including trigger failures, parameter problems, prompt conflicts, and SKILL\n- md structural issues",
+    "slug": "skill-debugging-assistant",
+    "displayTags": [
+      "cowork"
+    ],
+    "tags": [
+      "Technical Skills",
+      "Programming & software development",
+      "Software Engineer",
+      "coworker"
+    ],
+    "category": "Technical Skills",
+    "body": "# skill-debugging-assistant\n\n- Author: Unknown\n- Updated: Unknown\n- GitHub: https://github.com/Exploration-labs/Nates-Substack-Skills/tree/main/skill-debugging-assistant\n- Role Tag: Software Engineer\n- Category Tag: Technical Skills → Programming & software development\n- Display Tag:cowork\n\n## Description\n\nDebug, diagnose, and troubleshoot skill issues including trigger failures, parameter problems, prompt conflicts, and SKILL.md structural issues. Use when skills don't activate as expected, trigger incorrectly, produce unexpected behavior, conflict with system instructions, or fail packaging validation. Analyzes YAML frontmatter, descriptions, progressive disclosure, token budget, absolute statements, and reference file organization. For skill creators reviewing, validating, or fixing skill problems.\n\n## When to use this skill\n\n- Debug, diagnose, and troubleshoot skill issues including trigger failures, parameter problems, prompt conflicts, and SKILL\n- md structural issues\n\n## Success signals\n\n- Outputs align with the goal of the skill-debugging-assistant skill and follow its workflows/templates.\n- Recommendations or deliverables are tailored to the user context and requirements.\n- Results are clear, consistent, and ready for use (clean formatting/structure, actionable steps).",
+    "source": "skill-debugging-assistant.md",
+    "author": "Unknown",
+    "about": "- Debug, diagnose, and troubleshoot skill issues including trigger failures, parameter problems, prompt conflicts, and SKILL\n- md structural issues",
+    "role": "Software Engineer",
+    "githubUrl": "https://github.com/Exploration-labs/Nates-Substack-Skills/tree/main/skill-debugging-assistant",
+    "updated": "Unknown",
+    "categoryTag": "Technical Skills → Programming & software development",
+    "descriptionSection": "Debug, diagnose, and troubleshoot skill issues including trigger failures, parameter problems, prompt conflicts, and SKILL.md structural issues. Use when skills don't activate as expected, trigger incorrectly, produce unexpected behavior, conflict with system instructions, or fail packaging validation. Analyzes YAML frontmatter, descriptions, progressive disclosure, token budget, absolute statements, and reference file organization. For skill creators reviewing, validating, or fixing skill problems.",
+    "whenToUseSection": "- Debug, diagnose, and troubleshoot skill issues including trigger failures, parameter problems, prompt conflicts, and SKILL\n- md structural issues",
+    "successSignalsSection": "- Outputs align with the goal of the skill-debugging-assistant skill and follow its workflows/templates.\n- Recommendations or deliverables are tailored to the user context and requirements.\n- Results are clear, consistent, and ready for use (clean formatting/structure, actionable steps).",
+    "media": "/skills/head/Screenshot 2026-01-15 at 12.29.07.png"
+  },
+  {
+    "title": "resume-builder",
+    "description": "- Comprehensive resume creation, review, and optimization with support for multiple formats, ATS optimization, industry-specific guidance, and career stage customization\n- Use this skill when users request help writing, creating, reviewing, improving, or tailoring resumes for job applications",
+    "slug": "resume-builder",
+    "displayTags": [
+      "cowork"
+    ],
+    "tags": [
+      "Communication Skills",
+      "Written communication",
+      "Founder / Generalist",
+      "coworker"
+    ],
+    "category": "Communication Skills",
+    "body": "# resume-builder\n\n- Author: Unknown\n- Updated: Unknown\n- GitHub: https://github.com/Exploration-labs/Nates-Substack-Skills/tree/main/resume-builder\n- Role Tag: Founder / Generalist\n- Category Tag: Communication Skills → Written communication\n- Display Tag:cowork\n\n## Description\n\nComprehensive resume creation, review, and optimization with support for multiple formats, ATS optimization, industry-specific guidance, and career stage customization. Use this skill when users request help writing, creating, reviewing, improving, or tailoring resumes for job applications.\n\n## When to use this skill\n\n- Comprehensive resume creation, review, and optimization with support for multiple formats, ATS optimization, industry-specific guidance, and career stage customization\n- Use this skill when users request help writing, creating, reviewing, improving, or tailoring resumes for job applications\n\n## Success signals\n\n- Outputs align with the goal of the resume-builder skill and follow its workflows/templates.\n- Recommendations or deliverables are tailored to the user context and requirements.\n- Results are clear, consistent, and ready for use (clean formatting/structure, actionable steps).",
+    "source": "resume-builder.md",
+    "author": "Unknown",
+    "about": "- Comprehensive resume creation, review, and optimization with support for multiple formats, ATS optimization, industry-specific guidance, and career stage customization\n- Use this skill when users request help writing, creating, reviewing, improving, or tailoring resumes for job applications",
+    "role": "Founder / Generalist",
+    "githubUrl": "https://github.com/Exploration-labs/Nates-Substack-Skills/tree/main/resume-builder",
+    "updated": "Unknown",
+    "categoryTag": "Communication Skills → Written communication",
+    "descriptionSection": "Comprehensive resume creation, review, and optimization with support for multiple formats, ATS optimization, industry-specific guidance, and career stage customization. Use this skill when users request help writing, creating, reviewing, improving, or tailoring resumes for job applications.",
+    "whenToUseSection": "- Comprehensive resume creation, review, and optimization with support for multiple formats, ATS optimization, industry-specific guidance, and career stage customization\n- Use this skill when users request help writing, creating, reviewing, improving, or tailoring resumes for job applications",
+    "successSignalsSection": "- Outputs align with the goal of the resume-builder skill and follow its workflows/templates.\n- Recommendations or deliverables are tailored to the user context and requirements.\n- Results are clear, consistent, and ready for use (clean formatting/structure, actionable steps).",
+    "media": "/skills/head/Screenshot 2026-01-15 at 12.29.30.png"
+  },
+  {
+    "title": "requirements-elicitation",
+    "description": "- Systematic framework for analyzing product documents (PRDs, feature specs, user stories, roadmaps, one-pagers) to identify gaps, generate clarifying questions for PMs and engineers, and assess technical risks\n- This skill should be used when engineers or technical leads need to bridge PM documents and implementation by eliciting missing technical details rather than making assumptions",
+    "slug": "requirements-elicitation",
+    "displayTags": [
+      "cowork"
+    ],
+    "tags": [
+      "Interpersonal & Social Skills",
+      "Stakeholder management",
+      "Product Manager",
+      "coworker"
+    ],
+    "category": "Interpersonal & Social Skills",
+    "body": "# requirements-elicitation\n\n- Author: Unknown\n- Updated: Unknown\n- GitHub: https://github.com/Exploration-labs/Nates-Substack-Skills/tree/main/requirements-elicitation\n- Role Tag: Product Manager\n- Category Tag: Interpersonal & Social Skills → Stakeholder management\n- Display Tag:cowork\n\n## Description\n\nSystematic framework for analyzing product documents (PRDs, feature specs, user stories, roadmaps, one-pagers) to identify gaps, generate clarifying questions for PMs and engineers, and assess technical risks. This skill should be used when engineers or technical leads need to bridge PM documents and implementation by eliciting missing technical details rather than making assumptions. Use when asked to extract technical requirements, review specs, identify what's missing, or prepare clarifying questions from product documents.\n\n## When to use this skill\n\n- Systematic framework for analyzing product documents (PRDs, feature specs, user stories, roadmaps, one-pagers) to identify gaps, generate clarifying questions for PMs and engineers, and assess technical risks\n- This skill should be used when engineers or technical leads need to bridge PM documents and implementation by eliciting missing technical details rather than making assumptions\n\n## Success signals\n\n- Outputs align with the goal of the requirements-elicitation skill and follow its workflows/templates.\n- Recommendations or deliverables are tailored to the user context and requirements.\n- Results are clear, consistent, and ready for use (clean formatting/structure, actionable steps).",
+    "source": "requirements-elicitation.md",
+    "author": "Unknown",
+    "about": "- Systematic framework for analyzing product documents (PRDs, feature specs, user stories, roadmaps, one-pagers) to identify gaps, generate clarifying questions for PMs and engineers, and assess technical risks\n- This skill should be used when engineers or technical leads need to bridge PM documents and implementation by eliciting missing technical details rather than making assumptions",
+    "role": "Product Manager",
+    "githubUrl": "https://github.com/Exploration-labs/Nates-Substack-Skills/tree/main/requirements-elicitation",
+    "updated": "Unknown",
+    "categoryTag": "Interpersonal & Social Skills → Stakeholder management",
+    "descriptionSection": "Systematic framework for analyzing product documents (PRDs, feature specs, user stories, roadmaps, one-pagers) to identify gaps, generate clarifying questions for PMs and engineers, and assess technical risks. This skill should be used when engineers or technical leads need to bridge PM documents and implementation by eliciting missing technical details rather than making assumptions. Use when asked to extract technical requirements, review specs, identify what's missing, or prepare clarifying questions from product documents.",
+    "whenToUseSection": "- Systematic framework for analyzing product documents (PRDs, feature specs, user stories, roadmaps, one-pagers) to identify gaps, generate clarifying questions for PMs and engineers, and assess technical risks\n- This skill should be used when engineers or technical leads need to bridge PM documents and implementation by eliciting missing technical details rather than making assumptions",
+    "successSignalsSection": "- Outputs align with the goal of the requirements-elicitation skill and follow its workflows/templates.\n- Recommendations or deliverables are tailored to the user context and requirements.\n- Results are clear, consistent, and ready for use (clean formatting/structure, actionable steps).",
+    "media": "/skills/head/vercel-react-best-practices.png"
+  },
+  {
+    "title": "prompting-pattern-library",
+    "description": "- Comprehensive library of proven prompting patterns, frameworks, and examples for different use cases\n- This skill should be used when creating prompting guides, analyzing prompt effectiveness, teaching prompting techniques, or troubleshooting prompting issues",
+    "slug": "prompting-pattern-library",
+    "displayTags": [
+      "cowork"
+    ],
+    "tags": [
+      "Technical Skills",
+      "Programming & software development",
+      "Software Engineer",
+      "coworker"
+    ],
+    "category": "Technical Skills",
+    "body": "# prompting-pattern-library\n\n- Author: Unknown\n- Updated: Unknown\n- GitHub: https://github.com/Exploration-labs/Nates-Substack-Skills/tree/main/prompting-pattern-library\n- Role Tag: Software Engineer\n- Category Tag: Technical Skills → Programming & software development\n- Display Tag:cowork\n\n## Description\n\nComprehensive library of proven prompting patterns, frameworks, and examples for different use cases. This skill should be used when creating prompting guides, analyzing prompt effectiveness, teaching prompting techniques, or troubleshooting prompting issues. Use when writing about prompting, explaining prompting concepts to others, or improving existing prompts.\n\n## When to use this skill\n\n- Comprehensive library of proven prompting patterns, frameworks, and examples for different use cases\n- This skill should be used when creating prompting guides, analyzing prompt effectiveness, teaching prompting techniques, or troubleshooting prompting issues\n\n## Success signals\n\n- Outputs align with the goal of the prompting-pattern-library skill and follow its workflows/templates.\n- Recommendations or deliverables are tailored to the user context and requirements.\n- Results are clear, consistent, and ready for use (clean formatting/structure, actionable steps).",
+    "source": "prompting-pattern-library.md",
+    "author": "Unknown",
+    "about": "- Comprehensive library of proven prompting patterns, frameworks, and examples for different use cases\n- This skill should be used when creating prompting guides, analyzing prompt effectiveness, teaching prompting techniques, or troubleshooting prompting issues",
+    "role": "Software Engineer",
+    "githubUrl": "https://github.com/Exploration-labs/Nates-Substack-Skills/tree/main/prompting-pattern-library",
+    "updated": "Unknown",
+    "categoryTag": "Technical Skills → Programming & software development",
+    "descriptionSection": "Comprehensive library of proven prompting patterns, frameworks, and examples for different use cases. This skill should be used when creating prompting guides, analyzing prompt effectiveness, teaching prompting techniques, or troubleshooting prompting issues. Use when writing about prompting, explaining prompting concepts to others, or improving existing prompts.",
+    "whenToUseSection": "- Comprehensive library of proven prompting patterns, frameworks, and examples for different use cases\n- This skill should be used when creating prompting guides, analyzing prompt effectiveness, teaching prompting techniques, or troubleshooting prompting issues",
+    "successSignalsSection": "- Outputs align with the goal of the prompting-pattern-library skill and follow its workflows/templates.\n- Recommendations or deliverables are tailored to the user context and requirements.\n- Results are clear, consistent, and ready for use (clean formatting/structure, actionable steps).",
+    "media": "/skills/head/Screenshot 2026-01-15 at 12.25.47.png"
+  },
+  {
+    "title": "prompt-optimization-analyzer",
+    "description": "- Active diagnostic tool for analyzing skill prompts to identify token waste, anti-patterns, trigger issues, and optimization opportunities\n- Use when reviewing skill prompts, debugging why skills aren't triggering, optimizing token usage, or preparing skills for publication",
+    "slug": "prompt-optimization-analyzer",
+    "displayTags": [
+      "cowork"
+    ],
+    "tags": [
+      "Technical Skills",
+      "Programming & software development",
+      "Software Engineer",
+      "coworker"
+    ],
+    "category": "Technical Skills",
+    "body": "# prompt-optimization-analyzer\n\n- Author: Unknown\n- Updated: Unknown\n- GitHub: https://github.com/Exploration-labs/Nates-Substack-Skills/tree/main/prompt-optimization-analyzer\n- Role Tag: Software Engineer\n- Category Tag: Technical Skills → Programming & software development\n- Display Tag:cowork\n\n## Description\n\nActive diagnostic tool for analyzing skill prompts to identify token waste, anti-patterns, trigger issues, and optimization opportunities. Use when reviewing skill prompts, debugging why skills aren't triggering, optimizing token usage, or preparing skills for publication. Provides specific, actionable suggestions with examples.\n\n## When to use this skill\n\n- Active diagnostic tool for analyzing skill prompts to identify token waste, anti-patterns, trigger issues, and optimization opportunities\n- Use when reviewing skill prompts, debugging why skills aren't triggering, optimizing token usage, or preparing skills for publication\n\n## Success signals\n\n- Outputs align with the goal of the prompt-optimization-analyzer skill and follow its workflows/templates.\n- Recommendations or deliverables are tailored to the user context and requirements.\n- Results are clear, consistent, and ready for use (clean formatting/structure, actionable steps).",
+    "source": "prompt-optimization-analyzer.md",
+    "author": "Unknown",
+    "about": "- Active diagnostic tool for analyzing skill prompts to identify token waste, anti-patterns, trigger issues, and optimization opportunities\n- Use when reviewing skill prompts, debugging why skills aren't triggering, optimizing token usage, or preparing skills for publication",
+    "role": "Software Engineer",
+    "githubUrl": "https://github.com/Exploration-labs/Nates-Substack-Skills/tree/main/prompt-optimization-analyzer",
+    "updated": "Unknown",
+    "categoryTag": "Technical Skills → Programming & software development",
+    "descriptionSection": "Active diagnostic tool for analyzing skill prompts to identify token waste, anti-patterns, trigger issues, and optimization opportunities. Use when reviewing skill prompts, debugging why skills aren't triggering, optimizing token usage, or preparing skills for publication. Provides specific, actionable suggestions with examples.",
+    "whenToUseSection": "- Active diagnostic tool for analyzing skill prompts to identify token waste, anti-patterns, trigger issues, and optimization opportunities\n- Use when reviewing skill prompts, debugging why skills aren't triggering, optimizing token usage, or preparing skills for publication",
+    "successSignalsSection": "- Outputs align with the goal of the prompt-optimization-analyzer skill and follow its workflows/templates.\n- Recommendations or deliverables are tailored to the user context and requirements.\n- Results are clear, consistent, and ready for use (clean formatting/structure, actionable steps).",
+    "media": "/skills/head/Screenshot 2026-01-15 at 12.26.12.png"
+  },
+  {
+    "title": "pitch-deck-builder",
+    "description": "- Comprehensive pitch deck creation with conversational discovery, narrative structuring, and context-aware chunking strategies\n- This skill should be used when users request help creating pitch decks, investor presentations, fundraising decks, or startup presentations",
+    "slug": "pitch-deck-builder",
+    "displayTags": [
+      "cowork"
+    ],
+    "tags": [
+      "Communication Skills",
+      "Presentation & storytelling",
+      "Founder / Generalist",
+      "coworker"
+    ],
+    "category": "Communication Skills",
+    "body": "# pitch-deck-builder\n\n- Author: Unknown\n- Updated: Unknown\n- GitHub: https://github.com/Exploration-labs/Nates-Substack-Skills/tree/main/pitch-deck-builder\n- Role Tag: Founder / Generalist\n- Category Tag: Communication Skills → Presentation & storytelling\n- Display Tag:cowork\n\n## Description\n\nComprehensive pitch deck creation with conversational discovery, narrative structuring, and context-aware chunking strategies. This skill should be used when users request help creating pitch decks, investor presentations, fundraising decks, or startup presentations. It guides through narrative development, data collection, and professional slide creation.\n\n## When to use this skill\n\n- Comprehensive pitch deck creation with conversational discovery, narrative structuring, and context-aware chunking strategies\n- This skill should be used when users request help creating pitch decks, investor presentations, fundraising decks, or startup presentations\n\n## Success signals\n\n- Outputs align with the goal of the pitch-deck-builder skill and follow its workflows/templates.\n- Recommendations or deliverables are tailored to the user context and requirements.\n- Results are clear, consistent, and ready for use (clean formatting/structure, actionable steps).",
+    "source": "pitch-deck-builder.md",
+    "author": "Unknown",
+    "about": "- Comprehensive pitch deck creation with conversational discovery, narrative structuring, and context-aware chunking strategies\n- This skill should be used when users request help creating pitch decks, investor presentations, fundraising decks, or startup presentations",
+    "role": "Founder / Generalist",
+    "githubUrl": "https://github.com/Exploration-labs/Nates-Substack-Skills/tree/main/pitch-deck-builder",
+    "updated": "Unknown",
+    "categoryTag": "Communication Skills → Presentation & storytelling",
+    "descriptionSection": "Comprehensive pitch deck creation with conversational discovery, narrative structuring, and context-aware chunking strategies. This skill should be used when users request help creating pitch decks, investor presentations, fundraising decks, or startup presentations. It guides through narrative development, data collection, and professional slide creation.",
+    "whenToUseSection": "- Comprehensive pitch deck creation with conversational discovery, narrative structuring, and context-aware chunking strategies\n- This skill should be used when users request help creating pitch decks, investor presentations, fundraising decks, or startup presentations",
+    "successSignalsSection": "- Outputs align with the goal of the pitch-deck-builder skill and follow its workflows/templates.\n- Recommendations or deliverables are tailored to the user context and requirements.\n- Results are clear, consistent, and ready for use (clean formatting/structure, actionable steps).",
+    "media": "/skills/head/Screenshot 2026-01-15 at 12.26.31.png"
+  },
+  {
+    "title": "learning-capture",
+    "description": "- Recognize and capture reusable patterns, workflows, and domain knowledge from work sessions into new skills\n- Use when completing tasks that involve novel approaches repeated 2+ times, synthesizing complex domain knowledge across conversations, discovering effective reasoning patterns, or developing workflow optimizations",
+    "slug": "learning-capture",
+    "displayTags": [
+      "cowork"
+    ],
+    "tags": [
+      "Learning & Adaptability Skills",
+      "Learning agility",
+      "Research",
+      "coworker"
+    ],
+    "category": "Learning & Adaptability Skills",
+    "body": "# learning-capture\n\n- Author: Unknown\n- Updated: Unknown\n- GitHub: https://github.com/Exploration-labs/Nates-Substack-Skills/tree/main/learning-capture\n- Role Tag: Research\n- Category Tag: Learning & Adaptability Skills → Learning agility\n- Display Tag:cowork\n\n## Description\n\nRecognize and capture reusable patterns, workflows, and domain knowledge from work sessions into new skills. Use when completing tasks that involve novel approaches repeated 2+ times, synthesizing complex domain knowledge across conversations, discovering effective reasoning patterns, or developing workflow optimizations. Optimizes for high context window ROI by identifying patterns that will save 500+ tokens per reuse across 10+ future uses.\n\n## When to use this skill\n\n- Recognize and capture reusable patterns, workflows, and domain knowledge from work sessions into new skills\n- Use when completing tasks that involve novel approaches repeated 2+ times, synthesizing complex domain knowledge across conversations, discovering effective reasoning patterns, or developing workflow optimizations\n\n## Success signals\n\n- Outputs align with the goal of the learning-capture skill and follow its workflows/templates.\n- Recommendations or deliverables are tailored to the user context and requirements.\n- Results are clear, consistent, and ready for use (clean formatting/structure, actionable steps).",
+    "source": "learning-capture.md",
+    "author": "Unknown",
+    "about": "- Recognize and capture reusable patterns, workflows, and domain knowledge from work sessions into new skills\n- Use when completing tasks that involve novel approaches repeated 2+ times, synthesizing complex domain knowledge across conversations, discovering effective reasoning patterns, or developing workflow optimizations",
+    "role": "Research",
+    "githubUrl": "https://github.com/Exploration-labs/Nates-Substack-Skills/tree/main/learning-capture",
+    "updated": "Unknown",
+    "categoryTag": "Learning & Adaptability Skills → Learning agility",
+    "descriptionSection": "Recognize and capture reusable patterns, workflows, and domain knowledge from work sessions into new skills. Use when completing tasks that involve novel approaches repeated 2+ times, synthesizing complex domain knowledge across conversations, discovering effective reasoning patterns, or developing workflow optimizations. Optimizes for high context window ROI by identifying patterns that will save 500+ tokens per reuse across 10+ future uses.",
+    "whenToUseSection": "- Recognize and capture reusable patterns, workflows, and domain knowledge from work sessions into new skills\n- Use when completing tasks that involve novel approaches repeated 2+ times, synthesizing complex domain knowledge across conversations, discovering effective reasoning patterns, or developing workflow optimizations",
+    "successSignalsSection": "- Outputs align with the goal of the learning-capture skill and follow its workflows/templates.\n- Recommendations or deliverables are tailored to the user context and requirements.\n- Results are clear, consistent, and ready for use (clean formatting/structure, actionable steps).",
+    "media": "/skills/head/Screenshot 2026-01-15 at 12.26.51.png"
+  },
+  {
+    "title": "job-search-strategist",
+    "description": "- Comprehensive job search strategy skill for analyzing job postings, discovering non-obvious insights, conducting conversational skills-matching interviews, identifying skill development needs, and creating creative, personalized application strategies\n- This skill should be used when users want help with job applications, career transitions, analyzing job opportunities, or developing targeted job search approaches that help them stand out from other candidates",
+    "slug": "job-search-strategist",
+    "displayTags": [
+      "cowork"
+    ],
+    "tags": [
+      "Organizational & Productivity Skills",
+      "Planning & coordination",
+      "Founder / Generalist",
+      "coworker"
+    ],
+    "category": "Organizational & Productivity Skills",
+    "body": "# job-search-strategist\n\n- Author: Unknown\n- Updated: Unknown\n- GitHub: https://github.com/Exploration-labs/Nates-Substack-Skills/tree/main/job-search-strategist\n- Role Tag: Founder / Generalist\n- Category Tag: Organizational & Productivity Skills → Planning & coordination\n- Display Tag:cowork\n\n## Description\n\nComprehensive job search strategy skill for analyzing job postings, discovering non-obvious insights, conducting conversational skills-matching interviews, identifying skill development needs, and creating creative, personalized application strategies. This skill should be used when users want help with job applications, career transitions, analyzing job opportunities, or developing targeted job search approaches that help them stand out from other candidates.\n\n## When to use this skill\n\n- Comprehensive job search strategy skill for analyzing job postings, discovering non-obvious insights, conducting conversational skills-matching interviews, identifying skill development needs, and creating creative, personalized application strategies\n- This skill should be used when users want help with job applications, career transitions, analyzing job opportunities, or developing targeted job search approaches that help them stand out from other candidates\n\n## Success signals\n\n- Outputs align with the goal of the job-search-strategist skill and follow its workflows/templates.\n- Recommendations or deliverables are tailored to the user context and requirements.\n- Results are clear, consistent, and ready for use (clean formatting/structure, actionable steps).",
+    "source": "job-search-strategist.md",
+    "author": "Unknown",
+    "about": "- Comprehensive job search strategy skill for analyzing job postings, discovering non-obvious insights, conducting conversational skills-matching interviews, identifying skill development needs, and creating creative, personalized application strategies\n- This skill should be used when users want help with job applications, career transitions, analyzing job opportunities, or developing targeted job search approaches that help them stand out from other candidates",
+    "role": "Founder / Generalist",
+    "githubUrl": "https://github.com/Exploration-labs/Nates-Substack-Skills/tree/main/job-search-strategist",
+    "updated": "Unknown",
+    "categoryTag": "Organizational & Productivity Skills → Planning & coordination",
+    "descriptionSection": "Comprehensive job search strategy skill for analyzing job postings, discovering non-obvious insights, conducting conversational skills-matching interviews, identifying skill development needs, and creating creative, personalized application strategies. This skill should be used when users want help with job applications, career transitions, analyzing job opportunities, or developing targeted job search approaches that help them stand out from other candidates.",
+    "whenToUseSection": "- Comprehensive job search strategy skill for analyzing job postings, discovering non-obvious insights, conducting conversational skills-matching interviews, identifying skill development needs, and creating creative, personalized application strategies\n- This skill should be used when users want help with job applications, career transitions, analyzing job opportunities, or developing targeted job search approaches that help them stand out from other candidates",
+    "successSignalsSection": "- Outputs align with the goal of the job-search-strategist skill and follow its workflows/templates.\n- Recommendations or deliverables are tailored to the user context and requirements.\n- Results are clear, consistent, and ready for use (clean formatting/structure, actionable steps).",
+    "media": "/skills/head/Screenshot 2026-01-15 at 12.27.10.png"
+  },
+  {
+    "title": "complex-excel-builder",
+    "description": "- Comprehensive toolkit for creating multi-tab Excel workbooks for startups and scale-ups\n- Use this skill when building financial models, operational dashboards, board reports, or analytics workbooks that require data organization, complex calculations, pivot tables, visualizations, and documentation across multiple interconnected sheets",
+    "slug": "complex-excel-builder",
+    "displayTags": [
+      "coworks"
+    ],
+    "tags": [
+      "Technical Skills",
+      "Data analysis & engineering",
+      "Data Scientist / Analyst",
+      "coworker"
+    ],
+    "category": "Technical Skills",
+    "body": "# complex-excel-builder\n\n- Author: Unknown\n- Updated: Unknown\n- GitHub: https://github.com/Exploration-labs/Nates-Substack-Skills/tree/main/complex-excel-builder\n- Role Tag: Data Scientist / Analyst\n- Category Tag: Technical Skills → Data analysis & engineering\n- Display Tag:coworks\n\n## Description\n\nComprehensive toolkit for creating multi-tab Excel workbooks for startups and scale-ups. Use this skill when building financial models, operational dashboards, board reports, or analytics workbooks that require data organization, complex calculations, pivot tables, visualizations, and documentation across multiple interconnected sheets. Specialized for startup metrics (ARR, MRR, CAC, LTV), board-level reporting, and data-driven decision making.\n\n## When to use this skill\n\n- Comprehensive toolkit for creating multi-tab Excel workbooks for startups and scale-ups\n- Use this skill when building financial models, operational dashboards, board reports, or analytics workbooks that require data organization, complex calculations, pivot tables, visualizations, and documentation across multiple interconnected sheets\n\n## Success signals\n\n- Outputs align with the goal of the complex-excel-builder skill and follow its workflows/templates.\n- Recommendations or deliverables are tailored to the user context and requirements.\n- Results are clear, consistent, and ready for use (clean formatting/structure, actionable steps).",
+    "source": "complex-excel-builder.md",
+    "author": "Unknown",
+    "about": "- Comprehensive toolkit for creating multi-tab Excel workbooks for startups and scale-ups\n- Use this skill when building financial models, operational dashboards, board reports, or analytics workbooks that require data organization, complex calculations, pivot tables, visualizations, and documentation across multiple interconnected sheets",
+    "role": "Data Scientist / Analyst",
+    "githubUrl": "https://github.com/Exploration-labs/Nates-Substack-Skills/tree/main/complex-excel-builder",
+    "updated": "Unknown",
+    "categoryTag": "Technical Skills → Data analysis & engineering",
+    "descriptionSection": "Comprehensive toolkit for creating multi-tab Excel workbooks for startups and scale-ups. Use this skill when building financial models, operational dashboards, board reports, or analytics workbooks that require data organization, complex calculations, pivot tables, visualizations, and documentation across multiple interconnected sheets. Specialized for startup metrics (ARR, MRR, CAC, LTV), board-level reporting, and data-driven decision making.",
+    "whenToUseSection": "- Comprehensive toolkit for creating multi-tab Excel workbooks for startups and scale-ups\n- Use this skill when building financial models, operational dashboards, board reports, or analytics workbooks that require data organization, complex calculations, pivot tables, visualizations, and documentation across multiple interconnected sheets",
+    "successSignalsSection": "- Outputs align with the goal of the complex-excel-builder skill and follow its workflows/templates.\n- Recommendations or deliverables are tailored to the user context and requirements.\n- Results are clear, consistent, and ready for use (clean formatting/structure, actionable steps).",
+    "media": "/skills/head/Screenshot 2026-01-15 at 12.27.29.png"
+  },
+  {
+    "title": "ai-vendor-evaluation",
+    "description": "- Comprehensive framework for evaluating AI vendors and solutions to avoid costly mistakes\n- Use this skill when assessing AI vendor proposals, conducting due diligence, evaluating contracts, comparing vendors, or making build-vs-buy decisions",
+    "slug": "ai-vendor-evaluation",
+    "displayTags": [
+      "cowork",
+      "trending"
+    ],
+    "tags": [
+      "Business & Commercial Skills",
+      "Business strategy",
+      "Product Manager",
+      "coworker"
+    ],
+    "category": "Business & Commercial Skills",
+    "body": "# ai-vendor-evaluation\n\n- Author: Unknown\n- Updated: Unknown\n- GitHub: https://github.com/Exploration-labs/Nates-Substack-Skills/tree/main/ai-vendor-evaluation\n- Role Tag: Product Manager\n- Category Tag: Business & Commercial Skills → Business strategy\n- Display Tag:cowork, trending\n\n## Description\n\nComprehensive framework for evaluating AI vendors and solutions to avoid costly mistakes. Use this skill when assessing AI vendor proposals, conducting due diligence, evaluating contracts, comparing vendors, or making build-vs-buy decisions. Helps identify red flags, assess pricing models, evaluate technical capabilities, and conduct structured vendor comparisons.\n\n## When to use this skill\n\n- Comprehensive framework for evaluating AI vendors and solutions to avoid costly mistakes\n- Use this skill when assessing AI vendor proposals, conducting due diligence, evaluating contracts, comparing vendors, or making build-vs-buy decisions\n\n## Success signals\n\n- Outputs align with the goal of the ai-vendor-evaluation skill and follow its workflows/templates.\n- Recommendations or deliverables are tailored to the user context and requirements.\n- Results are clear, consistent, and ready for use (clean formatting/structure, actionable steps).",
+    "source": "ai-vendor-evaluation.md",
+    "author": "Unknown",
+    "about": "- Comprehensive framework for evaluating AI vendors and solutions to avoid costly mistakes\n- Use this skill when assessing AI vendor proposals, conducting due diligence, evaluating contracts, comparing vendors, or making build-vs-buy decisions",
+    "role": "Product Manager",
+    "githubUrl": "https://github.com/Exploration-labs/Nates-Substack-Skills/tree/main/ai-vendor-evaluation",
+    "updated": "Unknown",
+    "categoryTag": "Business & Commercial Skills → Business strategy",
+    "descriptionSection": "Comprehensive framework for evaluating AI vendors and solutions to avoid costly mistakes. Use this skill when assessing AI vendor proposals, conducting due diligence, evaluating contracts, comparing vendors, or making build-vs-buy decisions. Helps identify red flags, assess pricing models, evaluate technical capabilities, and conduct structured vendor comparisons.",
+    "whenToUseSection": "- Comprehensive framework for evaluating AI vendors and solutions to avoid costly mistakes\n- Use this skill when assessing AI vendor proposals, conducting due diligence, evaluating contracts, comparing vendors, or making build-vs-buy decisions",
+    "successSignalsSection": "- Outputs align with the goal of the ai-vendor-evaluation skill and follow its workflows/templates.\n- Recommendations or deliverables are tailored to the user context and requirements.\n- Results are clear, consistent, and ready for use (clean formatting/structure, actionable steps).",
+    "media": "/skills/head/Screenshot 2026-01-15 at 12.27.54.png"
+  },
+  {
+    "title": "agentic-development",
+    "description": "- Conversational guidance for building software with AI agents, covering workflows, tool selection, prompt strategies, parallel agent management, and best practices based on real-world high-volume agentic development experience\n- Use this skill when users ask about setting up agentic workflows, choosing models, optimizing prompts, managing parallel agents, or improving agent output quality",
+    "slug": "agentic-development",
+    "displayTags": [
+      "Cowork Skills",
+      "Trending Skills"
+    ],
+    "tags": [
+      "Technical Skills",
+      "Programming & software development",
+      "Software Engineer",
+      "coworker"
+    ],
+    "category": "Technical Skills",
+    "body": "# agentic-development\n\n- Author: Unknown\n- Updated: Unknown\n- GitHub: https://github.com/Exploration-labs/Nates-Substack-Skills/tree/main/agentic-development\n- Role Tag: Software Engineer\n- Category Tag: Technical Skills → Programming & software development\n- Display Tag: Cowork Skills, Trending Skills\n\n## Description\n\nConversational guidance for building software with AI agents, covering workflows, tool selection, prompt strategies, parallel agent management, and best practices based on real-world high-volume agentic development experience. Use this skill when users ask about setting up agentic workflows, choosing models, optimizing prompts, managing parallel agents, or improving agent output quality.\n\n## When to use this skill\n\n- Conversational guidance for building software with AI agents, covering workflows, tool selection, prompt strategies, parallel agent management, and best practices based on real-world high-volume agentic development experience\n- Use this skill when users ask about setting up agentic workflows, choosing models, optimizing prompts, managing parallel agents, or improving agent output quality\n\n## Success signals\n\n- Outputs align with the goal of the agentic-development skill and follow its workflows/templates.\n- Recommendations or deliverables are tailored to the user context and requirements.\n- Results are clear, consistent, and ready for use (clean formatting/structure, actionable steps).",
+    "source": "agentic-development.md",
+    "author": "Unknown",
+    "about": "- Conversational guidance for building software with AI agents, covering workflows, tool selection, prompt strategies, parallel agent management, and best practices based on real-world high-volume agentic development experience\n- Use this skill when users ask about setting up agentic workflows, choosing models, optimizing prompts, managing parallel agents, or improving agent output quality",
+    "role": "Software Engineer",
+    "githubUrl": "https://github.com/Exploration-labs/Nates-Substack-Skills/tree/main/agentic-development",
+    "updated": "Unknown",
+    "categoryTag": "Technical Skills → Programming & software development",
+    "descriptionSection": "Conversational guidance for building software with AI agents, covering workflows, tool selection, prompt strategies, parallel agent management, and best practices based on real-world high-volume agentic development experience. Use this skill when users ask about setting up agentic workflows, choosing models, optimizing prompts, managing parallel agents, or improving agent output quality.",
+    "whenToUseSection": "- Conversational guidance for building software with AI agents, covering workflows, tool selection, prompt strategies, parallel agent management, and best practices based on real-world high-volume agentic development experience\n- Use this skill when users ask about setting up agentic workflows, choosing models, optimizing prompts, managing parallel agents, or improving agent output quality",
+    "successSignalsSection": "- Outputs align with the goal of the agentic-development skill and follow its workflows/templates.\n- Recommendations or deliverables are tailored to the user context and requirements.\n- Results are clear, consistent, and ready for use (clean formatting/structure, actionable steps).",
+    "media": "/skills/head/Screenshot 2026-01-15 at 12.28.03.png"
+  }
+]

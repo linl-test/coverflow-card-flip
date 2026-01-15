@@ -5,6 +5,7 @@
 - GitHub: https://github.com/Exploration-labs/Nates-Substack-Skills/tree/main/ai-vendor-evaluation
 - Role Tag: Product Manager
 - Category Tag: Business & Commercial Skills → Business strategy
+- Display Tag:cowork, trending
 
 ## Description
 

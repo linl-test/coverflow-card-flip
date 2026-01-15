@@ -5,6 +5,7 @@
 - GitHub: https://github.com/Exploration-labs/Nates-Substack-Skills/tree/main/resume-builder
 - Role Tag: Founder / Generalist
 - Category Tag: Communication Skills → Written communication
+- Display Tag:cowork
 
 ## Description
 

@@ -560,7 +560,7 @@ const CoverflowCarousel = ({
 
       {/* Carousel container */}
       <div
-        className="coverflow-container relative w-full h-[450px] flex items-center justify-center"
+        className="relative isolate w-full h-[450px] flex items-center justify-center"
         style={{
           zIndex: isFocusMode ? 9999 : undefined,
           filter: isSearchMode ? "saturate(0.9)" : undefined,
@@ -579,28 +579,29 @@ const CoverflowCarousel = ({
             : undefined,
         }}
       >
-        <AnimatePresence>
-          {isFocusMode && (
-            <motion.div
-              className="absolute inset-0 bg-white/60 backdrop-blur-md"
-              style={{ zIndex: 5, pointerEvents: "auto" }}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.3 }}
-              onClick={() => {
-                if (import.meta.env.DEV) {
-                  console.log("[Coverflow] Backdrop click");
-                }
-                setFocusedIndex(null);
-                setActiveIndex(lastActiveBeforeFocus.current);
-              }}
-            />
-          )}
-        </AnimatePresence>
+        <div className="coverflow-container relative w-full h-full flex items-center justify-center">
+          <AnimatePresence>
+            {isFocusMode && (
+              <motion.div
+                className="absolute inset-0 bg-white/60 backdrop-blur-md"
+                style={{ zIndex: 5, pointerEvents: "auto" }}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.3 }}
+                onClick={() => {
+                  if (import.meta.env.DEV) {
+                    console.log("[Coverflow] Backdrop click");
+                  }
+                  setFocusedIndex(null);
+                  setActiveIndex(lastActiveBeforeFocus.current);
+                }}
+              />
+            )}
+          </AnimatePresence>
 
-        <AnimatePresence mode="popLayout">
-          {items.map((item, index) => {
+          <AnimatePresence mode="popLayout">
+            {items.map((item, index) => {
           const style = getItemStyle(index);
             const isActive = index === activeIndex;
             const isFocused = index === focusedIndex;
@@ -1225,11 +1226,12 @@ const CoverflowCarousel = ({
               </motion.div>
             );
           })}
-        </AnimatePresence>
+          </AnimatePresence>
+        </div>
 
         {variant === "content" && (
           <div
-            className={`pointer-events-none absolute inset-0 flex justify-between px-4 md:px-10 ${
+            className={`pointer-events-none absolute inset-0 z-[9999] flex justify-between px-2 sm:px-4 md:px-10 ${
               isSearchMode ? "items-end pb-8" : "items-center"
             }`}
           >
@@ -1238,7 +1240,8 @@ const CoverflowCarousel = ({
               onClick={handlePrev}
               disabled={isFocusMode || activeIndex === 0}
               aria-label="Previous result"
-              className="pointer-events-auto inline-flex items-center justify-center rounded-full bg-white shadow-[0_10px_30px_rgba(0,0,0,0.12)] border border-slate-200 h-12 w-12 text-slate-700 transition hover:-translate-y-0.5 hover:shadow-[0_16px_36px_rgba(0,0,0,0.16)] disabled:opacity-40 disabled:translate-y-0 disabled:shadow-none"
+              className="pointer-events-auto relative z-[10000] inline-flex items-center justify-center rounded-full bg-white shadow-[0_10px_30px_rgba(0,0,0,0.12)] border border-slate-200 h-12 w-12 text-slate-700 transition hover:-translate-y-0.5 hover:shadow-[0_16px_36px_rgba(0,0,0,0.16)] disabled:opacity-40 disabled:translate-y-0 disabled:shadow-none"
+              style={{ touchAction: "manipulation" }}
             >
               <ChevronLeft className="w-5 h-5" />
             </button>
@@ -1247,7 +1250,8 @@ const CoverflowCarousel = ({
               onClick={handleNext}
               disabled={isFocusMode || activeIndex === items.length - 1}
               aria-label="Next result"
-              className="pointer-events-auto inline-flex items-center justify-center rounded-full bg-white shadow-[0_10px_30px_rgba(0,0,0,0.12)] border border-slate-200 h-12 w-12 text-slate-700 transition hover:-translate-y-0.5 hover:shadow-[0_16px_36px_rgba(0,0,0,0.16)] disabled:opacity-40 disabled:translate-y-0 disabled:shadow-none"
+              className="pointer-events-auto relative z-[10000] inline-flex items-center justify-center rounded-full bg-white shadow-[0_10px_30px_rgba(0,0,0,0.12)] border border-slate-200 h-12 w-12 text-slate-700 transition hover:-translate-y-0.5 hover:shadow-[0_16px_36px_rgba(0,0,0,0.16)] disabled:opacity-40 disabled:translate-y-0 disabled:shadow-none"
+              style={{ touchAction: "manipulation" }}
             >
               <ChevronRight className="w-5 h-5" />
             </button>
@@ -1272,10 +1276,10 @@ const CoverflowCarousel = ({
       {variant !== "content" && (
         <>
           {/* Navigation */}
-          <div className="flex items-center gap-8 mt-8">
+          <div className="flex items-center gap-8 mt-8 relative z-[9999]">
             <button
               onClick={handlePrev}
-              className="nav-button disabled:opacity-40 disabled:cursor-not-allowed disabled:scale-100"
+              className="nav-button relative z-[10000] disabled:opacity-40 disabled:cursor-not-allowed disabled:scale-100"
               aria-label="Previous item"
               disabled={isFocusMode}
             >
@@ -1299,7 +1303,7 @@ const CoverflowCarousel = ({
 
             <button
               onClick={handleNext}
-              className="nav-button disabled:opacity-40 disabled:cursor-not-allowed disabled:scale-100"
+              className="nav-button relative z-[10000] disabled:opacity-40 disabled:cursor-not-allowed disabled:scale-100"
               aria-label="Next item"
               disabled={isFocusMode}
             >

@@ -5,6 +5,7 @@
 - GitHub: https://github.com/Exploration-labs/Nates-Substack-Skills/tree/main/pitch-deck-builder
 - Role Tag: Founder / Generalist
 - Category Tag: Communication Skills → Presentation & storytelling
+- Display Tag:cowork
 
 ## Description
 

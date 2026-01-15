@@ -5,6 +5,7 @@
 - GitHub: https://github.com/Exploration-labs/Nates-Substack-Skills/tree/main/agentic-development
 - Role Tag: Software Engineer
 - Category Tag: Technical Skills → Programming & software development
+- Display Tag: Cowork Skills, Trending Skills
 
 ## Description
 

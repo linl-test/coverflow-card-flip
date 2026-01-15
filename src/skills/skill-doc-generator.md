@@ -5,6 +5,7 @@
 - GitHub: https://github.com/Exploration-labs/Nates-Substack-Skills/tree/main/skill-doc-generator
 - Role Tag: Software Engineer
 - Category Tag: Communication Skills → Written communication
+- Display Tag:cowork
 
 ## Description
 

@@ -2,6 +2,9 @@ export interface ParsedSkill {
   title: string;
   description: string;
   tags: string[];
+  slug?: string;
+  displayTags?: string[];
+  media?: string;
   category?: string;
   body?: string;
   source?: string;
@@ -15,6 +18,14 @@ export interface ParsedSkill {
   whenToUseSection?: string;
   successSignalsSection?: string;
 }
+
+export const slugifySkill = (value: string) =>
+  value
+    .toString()
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/(^-|-$)+/g, "")
+    .replace(/-+/g, "-");
 
 const cleanText = (value: string) => value.trim().replace(/^\*\s*/, "").trim();
 
@@ -280,6 +291,7 @@ export const parseSkillsMarkdown = (markdown: string): ParsedSkill[] => {
         title,
         description: cleanText(description),
         tags: Array.from(tags),
+        slug: slugifySkill(title || source),
         category,
         body,
         author,
@@ -322,6 +334,12 @@ export const parseSkillFile = (markdown: string, source = "skill.md"): ParsedSki
   const githubLine =
     frontmatter.github ||
     lines.find((line) => /^-?\s*github:/i.test(line))?.replace(/^-?\s*github:\s*/i, "");
+  const displayTagLine =
+    frontmatter.displayTag ||
+    lines.find((line) => /^-?\s*display tag:/i.test(line))?.replace(/^-?\s*display tag:\s*/i, "");
+  const displayTags = displayTagLine
+    ? displayTagLine.split(/[,/]/).map((t) => t.trim()).filter(Boolean)
+    : undefined;
   const roleTagLine =
     lines.find((line) => /^-?\s*role tag:/i.test(line))?.replace(/^-?\s*role tag:\s*/i, "");
   const categoryTagLine =
@@ -387,10 +405,13 @@ export const parseSkillFile = (markdown: string, source = "skill.md"): ParsedSki
   if (autoTag) tags.add(autoTag);
 
   const category = frontmatter.category || categoryTagLine?.split("→")[0]?.trim();
+  const slug = slugifySkill(title || source);
 
   return {
     title,
     description,
+    slug,
+    displayTags,
     tags: Array.from(tags),
     category,
     body: content,

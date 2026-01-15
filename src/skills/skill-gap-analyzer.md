@@ -5,6 +5,7 @@
 - GitHub: https://github.com/Exploration-labs/Nates-Substack-Skills/tree/main/skill-gap-analyzer
 - Role Tag: Engineering Manager
 - Category Tag: Leadership & Management Skills → Strategic thinking
+- Display Tag:cowork
 
 ## Description
 

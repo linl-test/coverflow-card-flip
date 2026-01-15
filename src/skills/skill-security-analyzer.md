@@ -5,6 +5,7 @@
 - GitHub: https://github.com/Exploration-labs/Nates-Substack-Skills/tree/main/skill-security-analyzer
 - Role Tag: Software Engineer
 - Category Tag: Technical Skills → IT, cloud, cybersecurity
+- Display Tag:cowork
 
 ## Description
 

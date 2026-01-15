@@ -5,6 +5,7 @@
 - GitHub: https://github.com/Exploration-labs/Nates-Substack-Skills/tree/main/job-search-strategist
 - Role Tag: Founder / Generalist
 - Category Tag: Organizational & Productivity Skills → Planning & coordination
+- Display Tag:cowork
 
 ## Description
 
