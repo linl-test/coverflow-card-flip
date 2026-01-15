@@ -170,6 +170,8 @@ const CONTENT_SHADOW = {
   focused: "0 24px 70px rgba(0,0,0,0.18)",
   idle: "0 16px 40px rgba(0,0,0,0.12)",
 };
+const SETUP_SKILL_URL =
+  "https://support.claude.com/en/articles/12512180-using-skills-in-claude#h_a4222fa77b";
 
 const CoverflowCarousel = ({
   items,
@@ -941,13 +943,16 @@ const CoverflowCarousel = ({
                           )}
                           {isFocused && (
                             <>
-                              <button
-                                type="button"
+                              <a
+                                href={SETUP_SKILL_URL}
+                                target="_blank"
+                                rel="noreferrer"
+                                onClick={(event) => event.stopPropagation()}
                                 className="inline-flex items-center gap-2 rounded-full bg-slate-900 text-white px-4 py-2 text-sm font-semibold shadow-[0_12px_24px_rgba(0,0,0,0.18)] transition hover:-translate-y-0.5 hover:shadow-[0_16px_28px_rgba(0,0,0,0.22)]"
                               >
                                 <BadgeCheck className="w-4 h-4" />
                                 Set up skill
-                              </button>
+                              </a>
                               <button
                                 type="button"
                               className="inline-flex items-center gap-2 rounded-full bg-white px-4 py-2 text-sm font-semibold text-slate-700 border border-slate-200 shadow-sm transition hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed disabled:pointer-events-none"
@@ -1140,8 +1145,10 @@ const CoverflowCarousel = ({
                             Back to browsing
                           </button>
                           <div className="ml-auto flex items-center gap-2">
-                            <button
-                              type="button"
+                            <a
+                              href={SETUP_SKILL_URL}
+                              target="_blank"
+                              rel="noreferrer"
                               className="px-4 py-2 rounded-full text-white text-sm font-semibold shadow-sm transition"
                               style={{
                                 backgroundColor: accentColor,
@@ -1150,7 +1157,7 @@ const CoverflowCarousel = ({
                               onClick={(event) => event.stopPropagation()}
                             >
                               Set up Skill
-                            </button>
+                            </a>
                             <button
                               className="inline-flex items-center gap-2 px-4 py-2 text-sm font-semibold rounded-full text-white shadow-sm transition disabled:opacity-50 disabled:cursor-not-allowed disabled:pointer-events-none"
                               data-coverflow-download
