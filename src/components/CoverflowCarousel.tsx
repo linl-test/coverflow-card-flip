@@ -165,12 +165,18 @@ const cardBackgroundPalette = [
 
 const PREVIEW_BG_LIGHTEN = 45;
 const FOCUS_BG_LIGHTEN = 88;
+const CONTENT_CARD_BG = "linear-gradient(180deg, #ffffff 0%, #f8fafc 100%)";
+const CONTENT_SHADOW = {
+  focused: "0 24px 70px rgba(0,0,0,0.18)",
+  idle: "0 16px 40px rgba(0,0,0,0.12)",
+};
 
 const CoverflowCarousel = ({
   items,
   isSearchMode = false,
   variant = "explore",
 }: CoverflowCarouselProps) => {
+  const focusedCardRef = useRef<HTMLDivElement | null>(null);
   const [activeIndex, setActiveIndex] = useState(Math.floor(items.length / 2));
   const [focusedIndex, setFocusedIndex] = useState<number | null>(null);
   const [recentlyFocused, setRecentlyFocused] = useState(false);
@@ -245,6 +251,23 @@ const CoverflowCarousel = ({
       return () => clearTimeout(timeout);
     }
   }, [focusedIndex, recentlyFocused]);
+
+  useEffect(() => {
+    if (focusedIndex === null) {
+      focusedCardRef.current = null;
+      return;
+    }
+
+    const handleClickAway = (event: PointerEvent) => {
+      const target = event.target as Node | null;
+      if (target && focusedCardRef.current?.contains(target)) return;
+      setFocusedIndex(null);
+      setActiveIndex(lastActiveBeforeFocus.current);
+    };
+
+    document.addEventListener("pointerdown", handleClickAway);
+    return () => document.removeEventListener("pointerdown", handleClickAway);
+  }, [focusedIndex]);
 
   const handlePrev = useCallback(() => {
     if (focusedIndex !== null) return;
@@ -583,8 +606,10 @@ const CoverflowCarousel = ({
           <AnimatePresence>
             {isFocusMode && (
               <motion.div
-                className="absolute inset-0 bg-white/60 backdrop-blur-md"
-                style={{ zIndex: 5, pointerEvents: "auto" }}
+                className={`absolute inset-0 ${
+                  variant === "content" ? "bg-white/90 backdrop-blur-xl" : "bg-white/60 backdrop-blur-md"
+                }`}
+                style={{ zIndex: 12, pointerEvents: "auto" }}
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
@@ -681,11 +706,11 @@ const CoverflowCarousel = ({
             };
 
             if (variant === "content") {
-              cardShellStyle.boxShadow = isFocused
-                ? "0 20px 50px rgba(0,0,0,0.16)"
-                : "0 12px 30px rgba(0,0,0,0.12)";
-              cardShellStyle.background = "#ffffff";
-              cardShellStyle.border = "1px solid rgba(15,23,42,0.06)";
+              cardShellStyle.boxShadow = isFocused ? CONTENT_SHADOW.focused : CONTENT_SHADOW.idle;
+              cardShellStyle.background = CONTENT_CARD_BG;
+              cardShellStyle.border = isFocused
+                ? "1px solid rgba(15,23,42,0.12)"
+                : "1px solid rgba(15,23,42,0.06)";
               cardShellStyle.borderRadius = "22px";
             }
 
@@ -724,6 +749,7 @@ const CoverflowCarousel = ({
                 <div
                   className={cardClassName}
                   data-coverflow-card
+                  ref={isFocused ? focusedCardRef : undefined}
                   style={cardShellStyle}
                 >
                   {variant === "content" ? (
