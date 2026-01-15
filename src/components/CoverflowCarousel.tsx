@@ -480,14 +480,15 @@ const CoverflowCarousel = ({
     if (isFocusMode) {
       const diff = index - focusIndex;
       const isFocused = diff === 0;
+      const isContent = variant === "content";
 
       return {
-        opacity: 1,
-        x: isFocused ? 0 : diff * 140,
-        z: isFocused ? 500 : -400,
-        rotateY: isFocused ? 0 : diff < 0 ? 30 : -30,
-        scale: isFocused ? 1.15 : 0.8,
-        zIndex: isFocused ? 50 : 5 - Math.abs(diff),
+        opacity: isContent ? (isFocused ? 1 : 0) : 1,
+        x: isContent ? 0 : isFocused ? 0 : diff * 140,
+        z: isContent ? (isFocused ? 600 : -600) : isFocused ? 500 : -400,
+        rotateY: isContent ? 0 : isFocused ? 0 : diff < 0 ? 30 : -30,
+        scale: isFocused ? (isContent ? 1.02 : 1.15) : isContent ? 0.9 : 0.8,
+        zIndex: isFocused ? 50 : isContent ? -10 : 5 - Math.abs(diff),
         pointerEvents: isFocused ? "auto" as const : "none" as const,
       };
     }
@@ -606,9 +607,9 @@ const CoverflowCarousel = ({
           <AnimatePresence>
             {isFocusMode && (
               <motion.div
-                className={`absolute inset-0 ${
-                  variant === "content" ? "bg-white/90 backdrop-blur-xl" : "bg-white/60 backdrop-blur-md"
-                }`}
+            className={`absolute inset-0 ${
+              variant === "content" ? "bg-white/90 backdrop-blur-xl" : "bg-white/60 backdrop-blur-md"
+            }`}
                 style={{ zIndex: 12, pointerEvents: "auto" }}
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
